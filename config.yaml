@@ -1,0 +1,16 @@
+```yaml
+env:
+  grid_size: 10
+  num_cues: 5
+  reward_sparse_prob: 0.1
+  delay: 5
+  noise: 0.2
+
+training:
+  agent: ppo
+  timesteps: 200000
+  seed: 42
+
+experiment:
+  run_intervention_test: true
+  run_ablations: true
