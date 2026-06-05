@@ -6,7 +6,7 @@ import torch
 from env.wrapper import RLWrapper
 from agents.dqn_agent import DQNAgent
 
-from logging.logger import ExperimentLogger
+from experiment_logging.logger import ExperimentLogger
 
 from utils.config_loader import load_config
 from utils.seed import set_seed
