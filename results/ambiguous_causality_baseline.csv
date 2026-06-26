@@ -1,0 +1,17 @@
+condition,metric,learned_mean,random_mean,learned_minus_random,ci95
+clear_causality,reward,0.926533,0.219667,0.706867,0.008038
+clear_causality,goal_rate,0.948533,0.241667,0.706867,0.008038
+clear_causality,causal_target_rate,1.0,0.253533,0.746467,0.007527
+clear_causality,spurious_action_rate,0.2,0.253718,-0.053718,0.14593
+moderate_ambiguity,reward,0.6798,0.157333,0.522467,0.009706
+moderate_ambiguity,goal_rate,0.7018,0.179333,0.522467,0.009706
+moderate_ambiguity,causal_target_rate,1.0,0.253533,0.746467,0.007527
+moderate_ambiguity,spurious_action_rate,0.2,0.253718,-0.053718,0.14593
+high_ambiguity,reward,0.529933,0.119333,0.4106,0.009165
+high_ambiguity,goal_rate,0.551933,0.141333,0.4106,0.009165
+high_ambiguity,causal_target_rate,1.0,0.253533,0.746467,0.007527
+high_ambiguity,spurious_action_rate,0.166667,0.253718,-0.087051,0.136011
+extreme_ambiguity,reward,0.425067,0.093467,0.3316,0.008942
+extreme_ambiguity,goal_rate,0.447067,0.115467,0.3316,0.008942
+extreme_ambiguity,causal_target_rate,1.0,0.253533,0.746467,0.007527
+extreme_ambiguity,spurious_action_rate,0.3,0.253718,0.046282,0.16709

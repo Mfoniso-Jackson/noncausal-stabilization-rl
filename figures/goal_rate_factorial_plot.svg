@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="450" viewBox="0 0 720 450">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="360.0" y="30" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Goal-Rate Factorial Plot</text>
+<line x1="68" y1="382" x2="652" y2="382" stroke="#222"/>
+<line x1="68" y1="68" x2="68" y2="382" stroke="#222"/>
+<text x="360.0" y="436" text-anchor="middle" font-family="Arial" font-size="13">Reward delay</text>
+<text transform="translate(18 225.0) rotate(-90)" text-anchor="middle" font-family="Arial" font-size="13">Goal Rate +/- 95% CI</text>
+<text x="214.0" y="406" text-anchor="middle" font-family="Arial" font-size="12">low</text>
+<text x="506.0" y="406" text-anchor="middle" font-family="Arial" font-size="12">high</text>
+<polyline points="214.00,102.28 506.00,178.35" fill="none" stroke="#245c9c" stroke-width="2.4"/>
+<line x1="214.00" y1="102.28" x2="214.00" y2="102.28" stroke="#333" stroke-width="1.4"/>
+<circle cx="214.00" cy="102.28" r="5" fill="#245c9c"/>
+<line x1="506.00" y1="220.64" x2="506.00" y2="136.06" stroke="#333" stroke-width="1.4"/>
+<circle cx="506.00" cy="178.35" r="5" fill="#245c9c"/>
+<text x="507" y="58" font-family="Arial" font-size="12" fill="#245c9c">low sparsity</text>
+<polyline points="214.00,110.73 506.00,237.51" fill="none" stroke="#d66b2a" stroke-width="2.4"/>
+<line x1="214.00" y1="127.30" x2="214.00" y2="94.17" stroke="#333" stroke-width="1.4"/>
+<circle cx="214.00" cy="110.73" r="5" fill="#d66b2a"/>
+<line x1="506.00" y1="283.55" x2="506.00" y2="191.47" stroke="#333" stroke-width="1.4"/>
+<circle cx="506.00" cy="237.51" r="5" fill="#d66b2a"/>
+<text x="507" y="78" font-family="Arial" font-size="12" fill="#d66b2a">high sparsity</text>
+</svg>

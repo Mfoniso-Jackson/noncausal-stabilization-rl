@@ -1,0 +1,7 @@
+condition,metric,near_minus_far,ci95,t_stat,p_value_normal,near_greater_far
+no_distractors,SPI,0.0,0.0,0.0,1.0,False
+no_distractors,Q_mass,0.0,0.0,0.0,1.0,False
+balanced_distractors,SPI,-0.026667,0.058637,-0.891359,0.372737,False
+balanced_distractors,Q_mass,-1e-06,1e-06,-1.489165,0.136444,False
+temporally_biased_distractors,SPI,-0.083889,0.128206,-1.28248,0.199674,False
+temporally_biased_distractors,Q_mass,-0.000379,0.002093,-0.354838,0.722711,False

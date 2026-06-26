@@ -1,0 +1,4 @@
+condition,n,reward_mean,reward_ci95,goal_rate_mean,goal_rate_ci95,CDS_mean,CDS_ci95,SPI_mean,SPI_ci95,SPI_near_mean,SPI_near_ci95,SPI_mid_mean,SPI_mid_ci95,SPI_far_mean,SPI_far_ci95,SPI_neutral_mean,SPI_neutral_ci95,Q_mass_near_mean,Q_mass_near_ci95,Q_mass_mid_mean,Q_mass_mid_ci95,Q_mass_far_mean,Q_mass_far_ci95,Q_mass_neutral_mean,Q_mass_neutral_ci95
+no_distractors,30,0.978,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+balanced_distractors,30,0.978,0.0,1.0,0.0,0.800001,1e-06,0.2025,0.010064,0.17,0.042184,0.2,0.046987,0.196667,0.043557,0.243333,0.05033,0.199999,1e-06,0.2,1e-06,0.200001,1e-06,0.200001,1e-06
+temporally_biased_distractors,30,0.978,0.0,1.0,0.0,0.499951,4e-06,0.404028,0.036986,0.516111,0.090414,0.5,0.102706,0.6,0.090788,0.0,0.0,0.444385,0.001312,0.444351,0.001287,0.444764,0.001142,0.333005,2.7e-05

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="440" viewBox="0 0 720 440">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="360.0" y="28" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Mechanism Comparison Summary</text>
+<line x1="64" y1="376" x2="656" y2="376" stroke="#222"/>
+<line x1="64" y1="64" x2="64" y2="376" stroke="#222"/>
+<text x="360.0" y="428" text-anchor="middle" font-family="Arial" font-size="13">Mechanism</text>
+<text transform="translate(18 220.0) rotate(-90)" text-anchor="middle" font-family="Arial" font-size="13">CDS gain + SPI gain</text>
+<polyline points="64.00,272.76 261.33,285.87 458.67,309.61 656.00,310.25" fill="none" stroke="#245c9c" stroke-width="2.4"/>
+<line x1="64.00" y1="272.76" x2="64.00" y2="272.76" stroke="#333" stroke-width="1.5"/>
+<line x1="58.00" y1="272.76" x2="70.00" y2="272.76" stroke="#333" stroke-width="1.5"/>
+<line x1="58.00" y1="272.76" x2="70.00" y2="272.76" stroke="#333" stroke-width="1.5"/>
+<circle cx="64.00" cy="272.76" r="4.5" fill="#245c9c"/>
+<text x="64.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">sparsity</text>
+<text x="64.00" y="262.76" text-anchor="middle" font-family="Arial" font-size="11">0.297</text>
+<line x1="261.33" y1="285.87" x2="261.33" y2="285.87" stroke="#333" stroke-width="1.5"/>
+<line x1="255.33" y1="285.87" x2="267.33" y2="285.87" stroke="#333" stroke-width="1.5"/>
+<line x1="255.33" y1="285.87" x2="267.33" y2="285.87" stroke="#333" stroke-width="1.5"/>
+<circle cx="261.33" cy="285.87" r="4.5" fill="#245c9c"/>
+<text x="261.33" y="398" text-anchor="middle" font-family="Arial" font-size="11">noise</text>
+<text x="261.33" y="275.87" text-anchor="middle" font-family="Arial" font-size="11">0.247</text>
+<line x1="458.67" y1="309.61" x2="458.67" y2="309.61" stroke="#333" stroke-width="1.5"/>
+<line x1="452.67" y1="309.61" x2="464.67" y2="309.61" stroke="#333" stroke-width="1.5"/>
+<line x1="452.67" y1="309.61" x2="464.67" y2="309.61" stroke="#333" stroke-width="1.5"/>
+<circle cx="458.67" cy="309.61" r="4.5" fill="#245c9c"/>
+<text x="458.67" y="398" text-anchor="middle" font-family="Arial" font-size="11">delay</text>
+<text x="458.67" y="299.61" text-anchor="middle" font-family="Arial" font-size="11">0.155</text>
+<line x1="656.00" y1="310.25" x2="656.00" y2="310.25" stroke="#333" stroke-width="1.5"/>
+<line x1="650.00" y1="310.25" x2="662.00" y2="310.25" stroke="#333" stroke-width="1.5"/>
+<line x1="650.00" y1="310.25" x2="662.00" y2="310.25" stroke="#333" stroke-width="1.5"/>
+<circle cx="656.00" cy="310.25" r="4.5" fill="#245c9c"/>
+<text x="656.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">combined</text>
+<text x="656.00" y="300.25" text-anchor="middle" font-family="Arial" font-size="11">0.153</text>
+</svg>

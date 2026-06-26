@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="440" viewBox="0 0 720 440">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="360.0" y="28" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">CDS by Noise</text>
+<line x1="64" y1="376" x2="656" y2="376" stroke="#222"/>
+<line x1="64" y1="64" x2="64" y2="376" stroke="#222"/>
+<text x="360.0" y="428" text-anchor="middle" font-family="Arial" font-size="13">Transition noise</text>
+<text transform="translate(18 220.0) rotate(-90)" text-anchor="middle" font-family="Arial" font-size="13">CDS +/- 95% CI</text>
+<polyline points="64.00,339.84 212.00,333.93 360.00,336.38 508.00,335.56 656.00,338.93" fill="none" stroke="#245c9c" stroke-width="2.4"/>
+<line x1="64.00" y1="347.84" x2="64.00" y2="331.83" stroke="#333" stroke-width="1.5"/>
+<line x1="58.00" y1="347.84" x2="70.00" y2="347.84" stroke="#333" stroke-width="1.5"/>
+<line x1="58.00" y1="331.83" x2="70.00" y2="331.83" stroke="#333" stroke-width="1.5"/>
+<circle cx="64.00" cy="339.84" r="4.5" fill="#245c9c"/>
+<text x="64.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">0.0</text>
+<text x="64.00" y="329.84" text-anchor="middle" font-family="Arial" font-size="11">0.039</text>
+<line x1="212.00" y1="342.93" x2="212.00" y2="324.93" stroke="#333" stroke-width="1.5"/>
+<line x1="206.00" y1="342.93" x2="218.00" y2="342.93" stroke="#333" stroke-width="1.5"/>
+<line x1="206.00" y1="324.93" x2="218.00" y2="324.93" stroke="#333" stroke-width="1.5"/>
+<circle cx="212.00" cy="333.93" r="4.5" fill="#245c9c"/>
+<text x="212.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">0.05</text>
+<text x="212.00" y="323.93" text-anchor="middle" font-family="Arial" font-size="11">0.062</text>
+<line x1="360.00" y1="343.00" x2="360.00" y2="329.75" stroke="#333" stroke-width="1.5"/>
+<line x1="354.00" y1="343.00" x2="366.00" y2="343.00" stroke="#333" stroke-width="1.5"/>
+<line x1="354.00" y1="329.75" x2="366.00" y2="329.75" stroke="#333" stroke-width="1.5"/>
+<circle cx="360.00" cy="336.38" r="4.5" fill="#245c9c"/>
+<text x="360.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">0.1</text>
+<text x="360.00" y="326.38" text-anchor="middle" font-family="Arial" font-size="11">0.052</text>
+<line x1="508.00" y1="347.24" x2="508.00" y2="323.87" stroke="#333" stroke-width="1.5"/>
+<line x1="502.00" y1="347.24" x2="514.00" y2="347.24" stroke="#333" stroke-width="1.5"/>
+<line x1="502.00" y1="323.87" x2="514.00" y2="323.87" stroke="#333" stroke-width="1.5"/>
+<circle cx="508.00" cy="335.56" r="4.5" fill="#245c9c"/>
+<text x="508.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">0.2</text>
+<text x="508.00" y="325.56" text-anchor="middle" font-family="Arial" font-size="11">0.056</text>
+<line x1="656.00" y1="348.01" x2="656.00" y2="329.86" stroke="#333" stroke-width="1.5"/>
+<line x1="650.00" y1="348.01" x2="662.00" y2="348.01" stroke="#333" stroke-width="1.5"/>
+<line x1="650.00" y1="329.86" x2="662.00" y2="329.86" stroke="#333" stroke-width="1.5"/>
+<circle cx="656.00" cy="338.93" r="4.5" fill="#245c9c"/>
+<text x="656.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">0.3</text>
+<text x="656.00" y="328.93" text-anchor="middle" font-family="Arial" font-size="11">0.043</text>
+</svg>

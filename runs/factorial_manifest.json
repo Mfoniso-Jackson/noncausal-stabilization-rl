@@ -1,0 +1,124 @@
+{
+  "conditions": [
+    {
+      "condition": "low_delay_low_sparsity",
+      "delay_high": 0,
+      "delay_level": "low",
+      "env": {
+        "delay": 0,
+        "grid_size": 10,
+        "max_steps": 200,
+        "noise": 0.0,
+        "num_cues": 5,
+        "reward_sparse_prob": 1.0
+      },
+      "sparsity_high": 0,
+      "sparsity_level": "low"
+    },
+    {
+      "condition": "high_delay_low_sparsity",
+      "delay_high": 1,
+      "delay_level": "high",
+      "env": {
+        "delay": 6,
+        "grid_size": 10,
+        "max_steps": 200,
+        "noise": 0.0,
+        "num_cues": 5,
+        "reward_sparse_prob": 1.0
+      },
+      "sparsity_high": 0,
+      "sparsity_level": "low"
+    },
+    {
+      "condition": "low_delay_high_sparsity",
+      "delay_high": 0,
+      "delay_level": "low",
+      "env": {
+        "delay": 0,
+        "grid_size": 10,
+        "max_steps": 200,
+        "noise": 0.0,
+        "num_cues": 5,
+        "reward_sparse_prob": 0.1
+      },
+      "sparsity_high": 1,
+      "sparsity_level": "high"
+    },
+    {
+      "condition": "high_delay_high_sparsity",
+      "delay_high": 1,
+      "delay_level": "high",
+      "env": {
+        "delay": 6,
+        "grid_size": 10,
+        "max_steps": 200,
+        "noise": 0.0,
+        "num_cues": 5,
+        "reward_sparse_prob": 0.1
+      },
+      "sparsity_high": 1,
+      "sparsity_level": "high"
+    }
+  ],
+  "episodes": 300,
+  "eval_episodes": 30,
+  "interpretation": {
+    "cds_interaction": {
+      "ci95": 0.124874,
+      "effect": "delay_x_sparsity",
+      "estimate": -0.018614,
+      "metric": "CDS",
+      "p_value_normal": 0.770161,
+      "significant_approx": false,
+      "standardized_effect": -0.106684,
+      "t_stat": -0.292165
+    },
+    "high_delay_high_sparsity_cds_largest": true,
+    "high_delay_high_sparsity_learnable": false,
+    "high_delay_high_sparsity_spi_largest": false,
+    "spi_interaction": {
+      "ci95": 0.353084,
+      "effect": "delay_x_sparsity",
+      "estimate": -0.233333,
+      "metric": "SPI",
+      "p_value_normal": 0.195232,
+      "significant_approx": false,
+      "standardized_effect": -0.47296,
+      "t_stat": -1.295255
+    },
+    "supports_credit_assignment_ambiguity": false
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ]
+}

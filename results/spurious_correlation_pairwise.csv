@@ -1,0 +1,6 @@
+metric,strong_minus_none,ci95,t_stat,p_value_normal
+spurious_action_rate,0.018987,0.060054,0.619668,0.535476
+spurious_Q_advantage,-0.005371,0.030501,-0.345157,0.729976
+SPI,0.064074,0.080403,1.561937,0.118303
+reward,0.0,0.0,0.0,1.0
+goal_rate,0.0,0.0,0.0,1.0

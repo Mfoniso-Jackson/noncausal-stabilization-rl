@@ -1,0 +1,122 @@
+{
+  "config": {
+    "base_env": {
+      "grid_size": 10,
+      "max_steps": 200
+    },
+    "baseline": {
+      "delay": 0,
+      "noise": 0.0,
+      "num_cues": 0,
+      "reward_sparse_prob": 1.0
+    },
+    "cue_baseline": {
+      "delay": 0,
+      "noise": 0.0,
+      "num_cues": 5,
+      "reward_sparse_prob": 1.0
+    },
+    "episodes": 300,
+    "eval_episodes": 30,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "uncertainty_conditions": {
+      "high": {
+        "delay": 5,
+        "noise": 0.16,
+        "num_cues": 5,
+        "reward_sparse_prob": 0.18
+      },
+      "low": {
+        "delay": 1,
+        "noise": 0.05,
+        "num_cues": 5,
+        "reward_sparse_prob": 0.65
+      },
+      "medium": {
+        "delay": 3,
+        "noise": 0.1,
+        "num_cues": 5,
+        "reward_sparse_prob": 0.3
+      },
+      "very_high": {
+        "delay": 6,
+        "noise": 0.2,
+        "num_cues": 5,
+        "reward_sparse_prob": 0.1
+      },
+      "very_low": {
+        "delay": 0,
+        "noise": 0.0,
+        "num_cues": 5,
+        "reward_sparse_prob": 1.0
+      }
+    }
+  },
+  "high_power_seed_count": 30,
+  "interpretation": "inconclusive_no_reliable_relationship",
+  "trend_tests": [
+    {
+      "delta_aic_linear_minus_quadratic": -1.13427,
+      "evidence": "inconclusive",
+      "inverted_u_supported": false,
+      "linear_aic": -615.161076,
+      "linear_sse": 2.417889,
+      "metric": "CDS",
+      "monotonic_pattern": "non_monotonic",
+      "monotonic_supported": false,
+      "n": 150,
+      "peak_uncertainty": 0.25646,
+      "preferred_model": "tie",
+      "quadratic_aic": -614.026807,
+      "quadratic_sse": 2.403974,
+      "quadratic_term": 0.103847
+    },
+    {
+      "delta_aic_linear_minus_quadratic": -1.12139,
+      "evidence": "inconclusive",
+      "inverted_u_supported": false,
+      "linear_aic": -223.78802,
+      "linear_sse": 32.853178,
+      "metric": "SPI",
+      "monotonic_pattern": "non_monotonic",
+      "monotonic_supported": false,
+      "n": 150,
+      "peak_uncertainty": 0.4903,
+      "preferred_model": "tie",
+      "quadratic_aic": -222.66663,
+      "quadratic_sse": 32.661307,
+      "quadratic_term": -0.385622
+    }
+  ]
+}

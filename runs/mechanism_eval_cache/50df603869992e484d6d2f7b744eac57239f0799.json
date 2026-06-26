@@ -1,0 +1,8 @@
+{
+  "after_reward": 0.02,
+  "before_reward": 0.02,
+  "cds": 0.002849,
+  "goal_rate_after": 1.0,
+  "goal_rate_before": 1.0,
+  "spi": 1.0
+}

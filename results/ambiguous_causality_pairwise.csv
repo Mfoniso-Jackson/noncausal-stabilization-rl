@@ -1,0 +1,13 @@
+eval_mode,metric,extreme_minus_clear,ci95,t_stat,p_value_normal
+training_distribution,spurious_action_rate,0.1,0.22139,0.885316,0.375986
+training_distribution,spurious_Q_advantage,0.005719,0.049021,0.228648,0.819143
+training_distribution,spurious_vs_causal_Q,0.023126,0.066204,0.684653,0.493563
+training_distribution,SPI,0.133333,0.249815,1.046107,0.295512
+training_distribution,reward,-0.501467,0.007828,-125.559242,0.0
+training_distribution,goal_rate,-0.501467,0.007828,-125.559242,0.0
+decorrelated,spurious_action_rate,0.1,0.22139,0.885316,0.375986
+decorrelated,spurious_Q_advantage,0.005719,0.049021,0.228648,0.819143
+decorrelated,spurious_vs_causal_Q,0.023126,0.066204,0.684653,0.493563
+decorrelated,SPI,0.133333,0.249815,1.046107,0.295512
+decorrelated,reward,-0.501467,0.007828,-125.559242,0.0
+decorrelated,goal_rate,-0.501467,0.007828,-125.559242,0.0

@@ -1,0 +1,3 @@
+metric,n,linear_sse,quadratic_sse,linear_aic,quadratic_aic,delta_aic_linear_minus_quadratic,quadratic_term,peak_uncertainty,inverted_u_supported,monotonic_supported,evidence,monotonic_pattern,preferred_model
+CDS,150,2.417889,2.403974,-615.161076,-614.026807,-1.13427,0.103847,0.25646,False,False,inconclusive,non_monotonic,tie
+SPI,150,32.853178,32.661307,-223.78802,-222.66663,-1.12139,-0.385622,0.4903,False,False,inconclusive,non_monotonic,tie

@@ -1,0 +1,9 @@
+group,metric,n,linear_sse,quadratic_sse,linear_aic,quadratic_aic,delta_aic_linear_minus_quadratic,quadratic_term,peak_uncertainty,inverted_u_supported,monotonic_supported,evidence,monotonic_pattern,preferred_model
+sparsity,CDS,150,1.36291,1.362119,-701.151961,-699.239091,-1.91287,-0.02638,1.049971,False,False,inconclusive,non_monotonic,tie
+sparsity,SPI,150,36.612022,36.528144,-207.538796,-205.88284,-1.655957,-0.271579,0.834873,False,False,inconclusive,non_monotonic,tie
+delay,CDS,150,4.329722,4.279345,-527.769787,-527.525299,-0.244488,-0.001806,5.698179,False,False,inconclusive,non_monotonic,tie
+delay,SPI,150,34.527677,34.347164,-216.33111,-215.117376,-1.213734,-0.003419,4.409091,False,False,inconclusive,non_monotonic,tie
+noise,CDS,150,1.376911,1.370662,-699.618911,-698.301167,-1.317743,-0.717744,0.146016,False,False,inconclusive,non_monotonic,tie
+noise,SPI,150,35.36396,34.079126,-212.741311,-216.292537,3.551226,-10.292135,0.128762,True,False,inverted_u,non_monotonic,quadratic
+combined,CDS,150,2.417889,2.403974,-615.161076,-614.026807,-1.13427,0.103847,0.25646,False,False,inconclusive,non_monotonic,tie
+combined,SPI,150,32.853178,32.661307,-223.78802,-222.66663,-1.12139,-0.385622,0.4903,False,False,inconclusive,non_monotonic,tie

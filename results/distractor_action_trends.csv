@@ -1,0 +1,5 @@
+metric,slope,slope_ci95,standardized_effect,t_stat,p_value_normal,supports_positive_trend
+reward,0.0,0.0,0.0,0.0,1.0,False
+goal_rate,0.0,0.0,0.0,0.0,1.0,False
+CDS,0.076692,0.010179,0.805529,14.766998,0.0,True
+SPI,0.079104,0.010782,0.797923,14.379964,0.0,True

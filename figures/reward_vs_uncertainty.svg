@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="440" viewBox="0 0 720 440">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="360.0" y="28" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Reward vs Uncertainty</text>
+<line x1="64" y1="376" x2="656" y2="376" stroke="#222"/>
+<line x1="64" y1="64" x2="64" y2="376" stroke="#222"/>
+<text x="360.0" y="428" text-anchor="middle" font-family="Arial" font-size="13">Uncertainty level</text>
+<text transform="translate(18 220.0) rotate(-90)" text-anchor="middle" font-family="Arial" font-size="13">Reward +/- 95% CI</text>
+<polyline points="64.00,108.52 212.00,159.24 360.00,221.90 508.00,291.21 656.00,325.60" fill="none" stroke="#245c9c" stroke-width="2.4"/>
+<line x1="64.00" y1="108.52" x2="64.00" y2="108.52" stroke="#333" stroke-width="1.5"/>
+<line x1="58.00" y1="108.52" x2="70.00" y2="108.52" stroke="#333" stroke-width="1.5"/>
+<line x1="58.00" y1="108.52" x2="70.00" y2="108.52" stroke="#333" stroke-width="1.5"/>
+<circle cx="64.00" cy="108.52" r="4.5" fill="#245c9c"/>
+<text x="64.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">very_low</text>
+<text x="64.00" y="98.52" text-anchor="middle" font-family="Arial" font-size="11">0.820</text>
+<line x1="212.00" y1="170.71" x2="212.00" y2="147.77" stroke="#333" stroke-width="1.5"/>
+<line x1="206.00" y1="170.71" x2="218.00" y2="170.71" stroke="#333" stroke-width="1.5"/>
+<line x1="206.00" y1="147.77" x2="218.00" y2="147.77" stroke="#333" stroke-width="1.5"/>
+<circle cx="212.00" cy="159.24" r="4.5" fill="#245c9c"/>
+<text x="212.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">low</text>
+<text x="212.00" y="149.24" text-anchor="middle" font-family="Arial" font-size="11">0.327</text>
+<line x1="360.00" y1="246.83" x2="360.00" y2="196.96" stroke="#333" stroke-width="1.5"/>
+<line x1="354.00" y1="246.83" x2="366.00" y2="246.83" stroke="#333" stroke-width="1.5"/>
+<line x1="354.00" y1="196.96" x2="366.00" y2="196.96" stroke="#333" stroke-width="1.5"/>
+<circle cx="360.00" cy="221.90" r="4.5" fill="#245c9c"/>
+<text x="360.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">medium</text>
+<text x="360.00" y="211.90" text-anchor="middle" font-family="Arial" font-size="11">-0.282</text>
+<line x1="508.00" y1="318.69" x2="508.00" y2="263.73" stroke="#333" stroke-width="1.5"/>
+<line x1="502.00" y1="318.69" x2="514.00" y2="318.69" stroke="#333" stroke-width="1.5"/>
+<line x1="502.00" y1="263.73" x2="514.00" y2="263.73" stroke="#333" stroke-width="1.5"/>
+<circle cx="508.00" cy="291.21" r="4.5" fill="#245c9c"/>
+<text x="508.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">high</text>
+<text x="508.00" y="281.21" text-anchor="middle" font-family="Arial" font-size="11">-0.956</text>
+<line x1="656.00" y1="350.00" x2="656.00" y2="301.21" stroke="#333" stroke-width="1.5"/>
+<line x1="650.00" y1="350.00" x2="662.00" y2="350.00" stroke="#333" stroke-width="1.5"/>
+<line x1="650.00" y1="301.21" x2="662.00" y2="301.21" stroke="#333" stroke-width="1.5"/>
+<circle cx="656.00" cy="325.60" r="4.5" fill="#245c9c"/>
+<text x="656.00" y="398" text-anchor="middle" font-family="Arial" font-size="11">very_high</text>
+<text x="656.00" y="315.60" text-anchor="middle" font-family="Arial" font-size="11">-1.290</text>
+</svg>

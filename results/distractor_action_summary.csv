@@ -1,0 +1,5 @@
+condition,distractor_count,n,reward_mean,reward_ci95,goal_rate_mean,goal_rate_ci95,CDS_mean,CDS_ci95,SPI_mean,SPI_ci95
+distractors_0,0,30,0.978,0.0,1.0,0.0,0.0,0.0,0.0,0.0
+distractors_2,2,30,0.978,0.0,1.0,0.0,0.666667,0.0,0.659267,0.035224
+distractors_5,5,30,0.978,0.0,1.0,0.0,0.833333,0.0,0.833333,0.043405
+distractors_10,10,30,0.978,0.0,1.0,0.0,0.909093,1.2e-05,0.93,0.03138

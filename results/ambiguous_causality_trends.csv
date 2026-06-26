@@ -1,0 +1,13 @@
+eval_mode,metric,slope,slope_ci95,standardized_effect,t_stat,p_value_normal
+training_distribution,spurious_action_rate,0.026667,0.066312,0.072369,0.788199,0.430581
+training_distribution,spurious_Q_advantage,-0.001163,0.015536,-0.013509,-0.146755,0.883325
+training_distribution,spurious_vs_causal_Q,0.008087,0.019296,0.075409,0.821492,0.411366
+training_distribution,SPI,0.05,0.076858,0.116581,1.275085,0.202279
+training_distribution,reward,-0.165427,0.006425,-0.977609,-50.466549,0.0
+training_distribution,goal_rate,-0.165427,0.006425,-0.977609,-50.466549,0.0
+decorrelated,spurious_action_rate,0.026667,0.066312,0.072369,0.788199,0.430581
+decorrelated,spurious_Q_advantage,-0.001163,0.015536,-0.013509,-0.146755,0.883325
+decorrelated,spurious_vs_causal_Q,0.008087,0.019296,0.075409,0.821492,0.411366
+decorrelated,SPI,0.05,0.076858,0.116581,1.275085,0.202279
+decorrelated,reward,-0.165427,0.006425,-0.977609,-50.466549,0.0
+decorrelated,goal_rate,-0.165427,0.006425,-0.977609,-50.466549,0.0

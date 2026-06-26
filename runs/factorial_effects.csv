@@ -1,0 +1,13 @@
+metric,effect,estimate,ci95,standardized_effect,t_stat,p_value_normal,significant_approx
+reward,delay_main,-0.846,0.423563,-1.010795,-3.914793,9e-05,True
+reward,sparsity_main,-0.957333,0.423563,-1.143816,-4.429979,9e-06,True
+reward,delay_x_sparsity,-0.121778,0.599008,-0.145499,-0.398466,0.690287,False
+goal_rate,delay_main,-0.3,0.180357,-0.841782,-3.260208,0.001113,True
+goal_rate,sparsity_main,-0.033333,0.180357,-0.093531,-0.362245,0.717169,False
+goal_rate,delay_x_sparsity,-0.2,0.255063,-0.561188,-1.536877,0.124323,False
+CDS,delay_main,0.067667,0.088299,0.38782,1.502021,0.133092,False
+CDS,sparsity_main,0.030402,0.088299,0.174244,0.674843,0.499775,False
+CDS,delay_x_sparsity,-0.018614,0.124874,-0.106684,-0.292165,0.770161,False
+SPI,delay_main,0.1,0.249668,0.202697,0.785043,0.432428,False
+SPI,sparsity_main,0.266667,0.249668,0.540526,2.093448,0.036309,True
+SPI,delay_x_sparsity,-0.233333,0.353084,-0.47296,-1.295255,0.195232,False

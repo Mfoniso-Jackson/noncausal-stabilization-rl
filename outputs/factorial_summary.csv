@@ -1,0 +1,5 @@
+condition,delay_level,sparsity_level,delay,reward_sparse_prob,n,mean_reward,reward_ci95,goal_rate,goal_rate_ci95,cds_mean,cds_ci95,spi_mean,spi_ci95
+low_delay_low_sparsity,low,low,0,1.0,30,0.82,0.0,1.0,0.0,0.039087,0.030792,0.3,0.166789
+high_delay_low_sparsity,high,low,6,1.0,30,-0.026,0.470344,0.7,0.166789,0.106754,0.088883,0.4,0.178305
+low_delay_high_sparsity,low,high,0,0.1,30,-0.137333,0.1273,0.966667,0.065333,0.069489,0.039069,0.566667,0.180357
+high_delay_high_sparsity,high,high,6,0.1,30,-1.105111,0.348398,0.466667,0.181577,0.118541,0.07224,0.433333,0.180357

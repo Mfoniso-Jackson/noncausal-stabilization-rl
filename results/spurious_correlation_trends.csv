@@ -1,0 +1,6 @@
+metric,slope,slope_ci95,standardized_effect,t_stat,p_value_normal
+spurious_action_rate,0.021889,0.074114,0.053214,0.578869,0.562678
+spurious_Q_advantage,-0.004997,0.03399,-0.026517,-0.288154,0.773229
+SPI,0.072847,0.085481,0.151977,1.670299,0.09486
+reward,-0.0,0.0,0.0,-0.0,1.0
+goal_rate,0.0,0.0,0.0,0.0,1.0
