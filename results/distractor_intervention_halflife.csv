@@ -1,0 +1,4 @@
+distractor_count,pre_intervention_spi,intervened_block0_spi,naive_control_block0_spi,intervened_block1_spi,naive_control_block1_spi,intervened_half_life_blocks,naive_control_half_life_blocks,persistence_gap_blocks,intervened_final_spi,naive_control_final_spi,final_spi_cohens_d,final_spi_p_value,intervened_final_goal_rate,naive_control_final_goal_rate,final_goal_rate_p_value
+2,0.659267,0.094243,0.353577,0.064835,0.06832,20,1,19,0.06327,0.063776,-0.04815,0.855163,1.0,1.0,nan
+5,0.833333,0.132794,0.573039,0.088223,0.084586,20,1,19,0.081828,0.086471,-0.363869,0.171183,1.0,1.0,nan
+10,0.93,0.207,0.855326,0.097392,0.299437,1,1,0,0.093095,0.090743,0.228544,0.387741,1.0,1.0,nan
