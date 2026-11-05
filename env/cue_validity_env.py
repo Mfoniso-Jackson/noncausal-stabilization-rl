@@ -101,6 +101,26 @@ class CueValidityEnv:
         cue_bit = self.cue_present if self.phase == self.cue_phase else 0
         return self.phase * 2 + cue_bit
 
+    def observation_vector(self):
+        """Continuous feature encoding for function-approximation agents,
+        in place of the discrete observe() state index. Same 6 features
+        used by this repository's pre-existing recurrent/linear-DQN
+        experiments (phase_norm, cue bit, target flag, pre-target flag,
+        sin/cos phase), so a linear or neural agent here is directly
+        comparable to the tabular agent's use of observe()."""
+        import math
+
+        cue_bit = float(self.cue_present) if self.phase == self.cue_phase else 0.0
+        phase_norm = self.phase / self.target_phase
+        return [
+            phase_norm,
+            cue_bit,
+            1.0 if self.phase == self.target_phase else 0.0,
+            1.0 if self.phase < self.target_phase else 0.0,
+            math.sin(phase_norm * math.pi),
+            math.cos(phase_norm * math.pi),
+        ]
+
     def available_actions(self):
         return (ACTION_CAUSAL, ACTION_CUE) + NEUTRAL_ACTIONS
 

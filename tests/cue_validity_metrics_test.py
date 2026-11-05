@@ -1,7 +1,9 @@
 from metrics.cue_validity import (
+    causal_action_rate,
     cue_dependence_score,
     extinction_half_life,
     persistence_index,
+    proxy_dependence,
     softmax_mass,
 )
 
@@ -59,6 +61,26 @@ def test_extinction_half_life_zero_when_baseline_negligible():
     assert extinction_half_life([0.1, 0.2, 0.0], 0.0) == 0
 
 
+def test_causal_action_rate_matches_softmax_mass():
+    q_values = {CAUSAL: 1.0, CUE: 0.0, NEUTRAL_A: 0.0, NEUTRAL_B: 0.0}
+    rate = causal_action_rate(q_values, AVAILABLE, CAUSAL)
+    masses = softmax_mass(q_values, AVAILABLE)
+    assert abs(rate - masses[CAUSAL]) < 1e-9
+
+
+def test_proxy_dependence_zero_when_identical_q_values():
+    q_values = {CAUSAL: 2.0, CUE: 0.0, NEUTRAL_A: 0.0, NEUTRAL_B: 0.0}
+    dep = proxy_dependence(q_values, q_values, AVAILABLE, CAUSAL)
+    assert abs(dep) < 1e-9
+
+
+def test_proxy_dependence_positive_when_cue_present_favors_causal_more():
+    q_cue_present = {CAUSAL: 5.0, CUE: 0.0, NEUTRAL_A: 0.0, NEUTRAL_B: 0.0}
+    q_cue_absent = {CAUSAL: 0.0, CUE: 0.0, NEUTRAL_A: 0.0, NEUTRAL_B: 0.0}
+    dep = proxy_dependence(q_cue_present, q_cue_absent, AVAILABLE, CAUSAL)
+    assert dep > 0.5
+
+
 if __name__ == "__main__":
     test_cds_near_zero_when_causal_action_dominates()
     test_cds_near_tie_breaking_floor_when_all_q_equal()
@@ -69,4 +91,7 @@ if __name__ == "__main__":
     test_extinction_half_life_basic()
     test_extinction_half_life_censored_when_never_halves()
     test_extinction_half_life_zero_when_baseline_negligible()
+    test_causal_action_rate_matches_softmax_mass()
+    test_proxy_dependence_zero_when_identical_q_values()
+    test_proxy_dependence_positive_when_cue_present_favors_causal_more()
     print("All cue_validity metrics tests passed.")

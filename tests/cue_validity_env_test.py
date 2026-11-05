@@ -65,10 +65,35 @@ def test_available_actions_and_action_space_fixed_across_conditions():
         assert env.available_actions() == (0, 1, 2, 3)
 
 
+def test_observation_vector_matches_observe_cue_bit():
+    env = CueValidityEnv(cue_validity=1.0, cue_phase=4, target_phase=4, seed=0)
+    env.reset()
+    vector = env.observation_vector()
+    state = env.observe()
+    cue_bit_from_state = state % 2
+    assert abs(vector[1] - float(cue_bit_from_state)) < 1e-9
+    assert len(vector) == 6
+
+
+def test_observation_vector_target_flags():
+    env = CueValidityEnv(cue_validity=0.5, cue_phase=3, target_phase=4, seed=0)
+    env.reset()
+    while env.phase < env.target_phase:
+        vector = env.observation_vector()
+        assert vector[2] == 0.0  # not target phase
+        assert vector[3] == 1.0  # pre-target
+        env.step(2)  # neutral action, never ends episode early
+    vector = env.observation_vector()
+    assert vector[2] == 1.0
+    assert vector[3] == 0.0
+
+
 if __name__ == "__main__":
     test_validity_to_probs_endpoints()
     test_cue_tracks_hidden_state_before_decorrelation()
     test_decorrelate_removes_cue_state_relationship()
     test_cue_and_cue_action_never_affect_reward()
     test_available_actions_and_action_space_fixed_across_conditions()
+    test_observation_vector_matches_observe_cue_bit()
+    test_observation_vector_target_flags()
     print("All cue_validity_env tests passed.")
