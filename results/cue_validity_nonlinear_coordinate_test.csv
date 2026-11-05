@@ -1,0 +1,5 @@
+architecture,validity,raw_gap_mean,interaction_gap_mean,t_stat,p_value,cohens_d,coordinate_dependent
+linear,0.5,0.052489,0.032797,9.76265,0.0,3.689928,True
+linear,0.95,0.100448,0.046933,25.528876,0.0,9.648991,True
+neural,0.5,0.008589,0.000105,2.445854,0.020994,0.924445,True
+neural,0.95,0.017954,0.008358,1.948185,0.06148,0.736344,False

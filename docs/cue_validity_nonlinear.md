@@ -88,6 +88,24 @@ dependent, the same conclusion this repository's own
 `nonlinear_interaction_proxy_experiment.py` chain reached for a different
 environment).
 
+## Addendum (added after the run below; the sections above are unchanged)
+
+Result: neither factor alone eliminates the effect, and both together do.
+`linear_interaction_only` still shows a significant decorrelate-vs-naive
+effect (p<0.0001 both validity levels) but smaller than `linear_raw`'s
+(coordinate-dependence confirmed for the linear architecture, p<0.0001
+both levels). `neural_raw` also still shows a significant effect
+(p=0.0095, 0.0002) but smaller again. `neural_interaction_only` is the
+only condition statistically indistinguishable from the naive-control
+floor (p=0.978, 0.063). This is a more precise finding than this
+repository's prior "brittle linear-representation artifact" conclusion
+(from a different environment): persistence here is a graded property of
+both model capacity and feature accessibility, shrinking as either
+increases individually, vanishing only when both are combined -- not a
+binary property of linearity alone. See
+`reports/cue_validity_nonlinear_report.md` for full tables. This addendum
+does not change any criterion above.
+
 ## What would change this plan after the fact
 
 Nothing in the metrics, conditions, or criteria above will change after
