@@ -1,0 +1,17 @@
+memory_gap,metric,correlation_r,p_value
+0,spurious_action_rate,-0.03371,0.714728
+0,spurious_Q_advantage,-0.071022,0.440803
+0,spurious_vs_causal_Q,-0.118363,0.197899
+0,SPI,-0.042571,0.644321
+2,spurious_action_rate,0.117985,0.199345
+2,spurious_Q_advantage,0.139543,0.128494
+2,spurious_vs_causal_Q,0.182617,0.045896
+2,SPI,0.016541,0.857694
+5,spurious_action_rate,-0.139386,0.128928
+5,spurious_Q_advantage,-0.062584,0.4971
+5,spurious_vs_causal_Q,-0.110518,0.229487
+5,SPI,-0.070491,0.444237
+8,spurious_action_rate,0.048069,0.602114
+8,spurious_Q_advantage,-0.014569,0.874513
+8,spurious_vs_causal_Q,0.022791,0.804843
+8,SPI,0.008199,0.929178
