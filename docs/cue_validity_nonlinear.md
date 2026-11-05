@@ -49,9 +49,10 @@ the neural agent as a control.
   experiment's comparisons reuse the already-committed
   `results/cue_validity_proxy_dependence_summaries.csv` for those three
   conditions directly.
-- 8 seeds per new condition (reduced from the proxy-dependence
-  experiment's 15, to control the added cost of PyTorch training; a
-  power/cost tradeoff made explicitly). Same episode budget (3000
+- 15 seeds per new condition, matching the proxy-dependence experiment
+  (a timing check confirmed a full-scale neural run completes in ~9
+  seconds, so there is no cost reason to reduce seed count here). Same
+  episode budget (3000
   acquisition, 1500 post-intervention in 30 blocks of 50) as the
   proxy-dependence experiment, for comparability.
 
