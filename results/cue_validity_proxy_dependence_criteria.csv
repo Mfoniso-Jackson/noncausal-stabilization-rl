@@ -1,0 +1,7 @@
+agent_type,validity,decorrelate_mean_abs_dep,naive_mean_abs_dep,t_stat,p_value,cohens_d,criterion_1_met,criterion_2_met,supported
+tabular,0.5,0.016609,0.017321,-0.128245,0.898872,-0.048472,False,True,False
+tabular,0.95,0.016609,0.017321,-0.128245,0.898872,-0.048472,False,True,False
+linear_raw,0.5,0.061932,0.009443,32.225448,0.0,12.180046,True,True,True
+linear_raw,0.95,0.109891,0.009443,62.411706,0.0,23.589352,True,True,True
+linear_orthogonal,0.5,0.049846,0.006976,21.271197,0.0,8.039742,True,True,True
+linear_orthogonal,0.95,0.097921,0.006976,47.162697,0.0,17.825789,True,True,True

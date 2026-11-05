@@ -95,6 +95,25 @@ downplayed.
 
 A null result in every condition is a valid, reportable outcome.
 
+## Addendum (added after the run below; the sections above are unchanged)
+
+Result: the pre-registered criteria are met for both `linear_raw` and
+`linear_orthogonal` at both non-zero validity levels (p < 0.0001, Cohen's d
+8-24 in every supported cell), and not met for `tabular` at either level
+(p = 0.90, d near zero). `linear_orthogonal`'s effect size is comparable to
+`linear_raw`'s, so representation is not implicated as a raw-coordinate
+artifact by this experiment's own pre-registered criterion. Replay-buffer
+staleness is excluded by direct calculation (the buffer cycles roughly 2.5x
+over during the measurement windows). This is the first properly
+controlled, pre-registered, statistically decisive positive finding in
+this research program. See `reports/cue_validity_proxy_dependence_report.md`
+for the full results tables and the gradient-asymmetry mechanism proposed
+to explain why decorrelation (used here) and reversal (used in
+`experiments/spurious_correlation_reversal_experiment.py`, tabular agent)
+might differ in extinction speed -- not yet tested directly in one matched
+design, and recommended as the next experiment. This addendum does not
+change any criterion above.
+
 ## What would change this plan after the fact
 
 Nothing in the metric definitions, conditions, or success criteria above
