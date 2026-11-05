@@ -1,0 +1,7 @@
+agent_type,validity,reversal_gap_mean,decorrelation_gap_mean,t_stat,p_value,cohens_d,asymmetry_supported
+tabular,0.5,0.022007,0.023217,-0.18794,0.852279,-0.071034,False
+tabular,0.95,0.022234,0.023217,-0.141005,0.888875,-0.053295,False
+linear_raw,0.5,0.070552,0.053998,2.975911,0.005962,1.124788,False
+linear_raw,0.95,0.13224,0.101957,3.442549,0.00183,1.301161,False
+linear_orthogonal,0.5,0.066531,0.045638,3.607255,0.001191,1.363413,False
+linear_orthogonal,0.95,0.134736,0.093713,4.824217,4.5e-05,1.823382,False

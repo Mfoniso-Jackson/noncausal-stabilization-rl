@@ -75,6 +75,31 @@ criterion there is a check that reversal does not somehow make tabular
 
 A null or small result is a valid, reportable outcome.
 
+## Addendum (added after the run below; the sections above are unchanged)
+
+Result: the pre-registered raw-gap criterion found no asymmetry (reversal's
+absolute gap was larger than decorrelation's for linear agents, not
+smaller). On inspection this criterion was not a fair comparison: reversal's
+fully-adapted target is a full sign flip from the acquisition value, a
+strictly larger distance to cover than decorrelation's near-zero target, in
+the same episode budget. A post-hoc, clearly-labeled-as-exploratory
+analysis in `reports/cue_validity_reversal_report.md` instead compares the
+*fraction* of the required change achieved per seed (a rate, not a
+distance), and finds reversal significantly faster than decorrelation in
+every function-approximation cell (p < 0.001, Cohen's d 1.6-3.0), with
+tabular showing no difference (both near-fully adapted) as expected. This
+is consistent with, and confirms, the gradient-asymmetry mechanism this
+experiment set out to test -- it was the pre-registered metric's
+normalization that was wrong, not the underlying hypothesis. This addendum
+does not change the criteria above (which remain evaluated as written and
+are reported as "not supported" by their own, now-understood-to-be-flawed,
+terms); the normalized analysis is reported separately as exploratory,
+consistent with this document's own rule against editing settled criteria
+after the fact. The key general lesson, stated explicitly in the report:
+a "gap to naive control" metric must be normalized by the required
+distance whenever the fully-adapted target differs between the conditions
+being compared, which was not anticipated when this document was written.
+
 ## What would change this plan after the fact
 
 Nothing in the metrics, conditions, or criteria above will change after

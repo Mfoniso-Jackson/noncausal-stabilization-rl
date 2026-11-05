@@ -1,0 +1,7 @@
+agent_type,validity,reversal_fraction_adapted,decorrelation_fraction_adapted,t_stat,p_value,cohens_d,reversal_faster
+tabular,0.5,1.009063,1.093067,-1.108688,0.276997,-0.419045,False
+tabular,0.95,1.028975,1.049515,-0.475807,0.637903,-0.179838,False
+linear_raw,0.5,0.508559,0.349079,6.354045,1e-06,2.401603,True
+linear_raw,0.95,0.503556,0.341226,7.952747,0.0,3.005855,True
+linear_orthogonal,0.5,0.511826,0.367565,4.235694,0.000223,1.600942,True
+linear_orthogonal,0.95,0.481844,0.336346,6.459254,1e-06,2.441368,True
