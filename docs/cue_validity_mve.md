@@ -119,6 +119,24 @@ interpretation of their output), the fix will be committed separately with
 an explicit note that re-running was required, and the pre-registered
 criteria above will still apply to the corrected run.
 
+## Addendum (added after the run below; the sections above are unchanged)
+
+The run reported in `reports/cue_validity_mve_report.md` found that
+acquisition-end CDS never differs from the exact tie-breaking floor at any
+`cue_validity` level, including 0.95 -- a structural property of this
+environment (`cue_phase` and `target_phase` are separate decision points,
+so no action chosen at `cue_phase` can affect the bootstrapped return), not
+a bug in the code relative to its own stated invariants. The
+pre-registered success/failure criteria above were evaluated exactly as
+written and are unaffected; the hypothesis is not supported by this run,
+and more specifically the intervention-persistence question could not be
+meaningfully tested at all under this particular environment structure.
+See the report's "Why acquisition itself shows no differentiation" and
+"Next recommended experiment" sections for the full mechanistic account and
+the proposed structural fix (fold `cue_phase` into `target_phase`) for a
+follow-up run. This addendum does not change any criterion above, and no
+part of this document was edited after the run's results were inspected.
+
 ## Planned follow-ups (explicitly out of scope for this MVE)
 
 1. Repeat with a function-approximation agent (DQN, reusing this session's
