@@ -72,6 +72,7 @@ class CueValidityEnv:
         self.step_penalty = step_penalty
         self.rng = random.Random(seed)
         self._decorrelated = False
+        self._reversed = False
         self.reset()
 
     def decorrelate(self):
@@ -79,18 +80,32 @@ class CueValidityEnv:
         about hidden_state from this call forward. Nothing else changes."""
         self._decorrelated = True
 
+    def reverse(self):
+        """Apply the alternative intervention: the cue's correlation with
+        hidden_state flips sign (P(cue=1|state=1) and P(cue=1|state=0) are
+        swapped) from this call forward, with the same magnitude it had
+        during acquisition. Nothing else changes. Mutually exclusive with
+        decorrelate() -- only call one of the two on a given environment."""
+        self._reversed = True
+
     @property
     def is_decorrelated(self):
         return self._decorrelated
+
+    @property
+    def is_reversed(self):
+        return self._reversed
 
     def reset(self):
         self.phase = 0
         self.done = False
         self.hidden_state = int(self.rng.random() < 0.5)
+        p_given_1, p_given_0 = validity_to_probs(self.cue_validity)
         if self._decorrelated:
             p_cue = 0.5
+        elif self._reversed:
+            p_cue = p_given_0 if self.hidden_state else p_given_1
         else:
-            p_given_1, p_given_0 = validity_to_probs(self.cue_validity)
             p_cue = p_given_1 if self.hidden_state else p_given_0
         self.cue_present = int(self.rng.random() < p_cue)
         self.causal_action_taken = False

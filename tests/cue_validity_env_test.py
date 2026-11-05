@@ -75,6 +75,27 @@ def test_observation_vector_matches_observe_cue_bit():
     assert len(vector) == 6
 
 
+def test_reverse_flips_cue_state_correlation():
+    env = CueValidityEnv(cue_validity=1.0, seed=0)
+    env.reverse()
+    assert env.is_reversed
+
+    agreements = 0
+    trials = 4000
+    for i in range(trials):
+        env.rng.seed(i)
+        env.reset()
+        agreements += int(env.cue_present == env.hidden_state)
+    rate = agreements / trials
+    assert rate < 0.15, f"expected strong anti-correlation after reverse(), got agreement rate {rate}"
+
+
+def test_reverse_and_decorrelate_never_both_true_by_default():
+    env = CueValidityEnv(cue_validity=0.5, seed=0)
+    assert not env.is_decorrelated
+    assert not env.is_reversed
+
+
 def test_observation_vector_target_flags():
     env = CueValidityEnv(cue_validity=0.5, cue_phase=3, target_phase=4, seed=0)
     env.reset()
@@ -96,4 +117,6 @@ if __name__ == "__main__":
     test_available_actions_and_action_space_fixed_across_conditions()
     test_observation_vector_matches_observe_cue_bit()
     test_observation_vector_target_flags()
+    test_reverse_flips_cue_state_correlation()
+    test_reverse_and_decorrelate_never_both_true_by_default()
     print("All cue_validity_env tests passed.")
