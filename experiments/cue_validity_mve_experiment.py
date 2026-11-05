@@ -377,10 +377,24 @@ def write_report(summaries, criteria_results, floor_check, hypothesis_supported)
             ),
             "",
             "## Limitations",
-            "This MVE tests only the decorrelate intervention with a tabular SARSA(lambda) agent, by pre-registered design -- reversal and action-removal interventions, and function-approximation agents, are explicitly deferred (see docs/cue_validity_mve.md, Planned follow-ups). Extinction half-life uses 50-episode blocks; a null half-life result at this resolution does not rule out a faster, sub-block dynamic. More importantly, per the mechanistic diagnosis above: this design cannot test the intervention-persistence question at all until the cue is observed at (or folded into) the same decision point where the causal and cue-associated actions compete for the terminal reward -- as the pre-existing experiments in this repository's `experiments/` directory do (e.g. `ambiguous_causality_experiment.py`'s PROBE_PHASE = TARGET_PHASE - 1). That structural change is the first item in the next-experiment recommendation below, not an optional refinement.",
+            "This MVE tests only the decorrelate intervention with a tabular SARSA(lambda) agent, by pre-registered design -- reversal and action-removal interventions, and function-approximation agents, are explicitly deferred (see docs/cue_validity_mve.md, Planned follow-ups). Extinction half-life uses 50-episode blocks; a null half-life result at this resolution does not rule out a faster, sub-block dynamic.",
+            "",
+            "## Correction (added after initial publication of this report; see docs/cue_validity_mve.md's 'Correction to the addendum')",
+            (
+                "An earlier version of this section recommended folding cue_phase into target_phase as the fix for the diagnosis above. "
+                "That was checked empirically and does not work, for a more general reason than the one diagnosed above: see "
+                "docs/tabular_rl_cannot_be_superstitious.md. Folding the cue into the decision state makes CDS *decrease* as cue_validity "
+                "increases (checked: 0.58 / 0.55 / 0.53 at validity 0.0 / 0.5 / 0.95), because the cue-associated action never yields reward "
+                "at any validity level, so a more informative cue only sharpens the (correct) preference for the causal action -- that tests "
+                "rational cue exploitation, not non-causal dependence. More generally: tabular RL cannot exhibit genuine non-causal "
+                "stabilization at all, because every (state, action) pair gets an independent value estimate with no mechanism for "
+                "information to leak between states -- a never-rewarded action cannot acquire a stable positive value regardless of how "
+                "correlated its context is with reward. This is consistent with, and explains, every tabular-agent intervention in this "
+                "repository (this MVE and the pre-existing scripts alike) finding no persistent effect."
+            ),
             "",
             "## Next recommended experiment",
-            "Re-run this exact design (same pre-registered metrics, success criteria, and conditions) with one structural change: fold the cue observation into the target_phase decision state itself (cue_phase = target_phase), so the causal and cue-associated actions genuinely compete for the same terminal-reward credit at the same state, giving cue_validity an actual channel through which it could bias behavior. This also serves as a direct, controlled test of a hypothesis raised by this result: that measured CDS/SPI departures from the tie-breaking floor in this repository's other experiments (which do have this competing-at-the-same-state structure) may themselves be largely credit-diffusion/stochastic-approximation drift rather than genuine validity-dependent learning, since a cue_validity=0.0 floor control run through the *same* competing-action structure would be the cleanest available test of that alternative explanation.",
+            "Per docs/tabular_rl_cannot_be_superstitious.md: the phenomenon requires either genuine state aliasing (two causally different situations indistinguishable to the agent, not merely observed at different times) or function approximation with shared parameters across states. This repository's own linear_feature_ablation_experiment.py -> orthogonalized_proxy_feature_experiment.py -> nonlinear_interaction_proxy_experiment.py chain already tested exactly this boundary and found the one positive signal it produced was a brittle linear-representation artifact, not a robust effect. A credible next experiment needs a state-aliased or function-approximation redesign of this MVE's cue-validity sweep that explicitly rules out that same artifact (e.g. by testing whether an orthogonalized or nonlinear representation of the same validity-swept cue reproduces or kills any observed effect), rather than another tabular variant of this design.",
         ]
     )
     with open(os.path.join(REPORTS_DIR, "cue_validity_mve_report.md"), "w", encoding="utf-8") as f:

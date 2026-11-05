@@ -131,11 +131,28 @@ pre-registered success/failure criteria above were evaluated exactly as
 written and are unaffected; the hypothesis is not supported by this run,
 and more specifically the intervention-persistence question could not be
 meaningfully tested at all under this particular environment structure.
-See the report's "Why acquisition itself shows no differentiation" and
-"Next recommended experiment" sections for the full mechanistic account and
-the proposed structural fix (fold `cue_phase` into `target_phase`) for a
-follow-up run. This addendum does not change any criterion above, and no
-part of this document was edited after the run's results were inspected.
+See the report's "Why acquisition itself shows no differentiation" section
+for the full mechanistic account. This addendum does not change any
+criterion above, and no part of this document was edited after the run's
+results were inspected.
+
+## Correction to the addendum above
+
+The structural fix proposed above (fold `cue_phase` into `target_phase`)
+was checked empirically and does not work, for a different and more
+general reason than the one diagnosed above: see
+`docs/tabular_rl_cannot_be_superstitious.md`. Folding the cue into the
+decision state makes CDS *decrease* as `cue_validity` increases (checked:
+0.58 / 0.55 / 0.53 at validity 0.0 / 0.5 / 0.95), because the cue-associated
+action never yields reward at any validity level, so a more informative
+cue only sharpens the (correct) preference for the causal action -- this
+tests rational cue exploitation, not non-causal dependence. The note above
+generalizes this into a structural claim about tabular RL as a whole and
+corrects the report's "Next recommended experiment" section accordingly
+(superseded by the function-approximation / state-aliasing direction in
+that note, not the fold proposed here). This correction is itself dated
+and additive, consistent with this document's own rule against editing
+settled criteria after the fact.
 
 ## Planned follow-ups (explicitly out of scope for this MVE)
 
