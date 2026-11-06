@@ -102,3 +102,43 @@ consequence (possible abandonment/pivot), this applies with particular
 force here: a result unfavorable to the representation-sharing account
 will be reported as the pre-registered criteria define it, not reframed
 after the fact.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Primary verdict**: `neural_raw` retains a significant decorrelate-vs-naive
+effect under SGD at **both** validity levels (p=0.018, p=0.0003, Cohen's
+d=0.95/1.57). The Go/No-Go "abandon or pivot" trigger named in the
+pre-registration is **not** activated -- the effect survives removing
+momentum entirely, which is evidence against the representation-sharing
+account being an artifact of Adam's optimizer dynamics.
+
+A notable, unanticipated secondary finding: `neural_interaction_only` --
+which showed **no** significant effect under Adam -- **does** show a
+significant effect under SGD at v=0.95 (p=0.0025) and a near-significant
+one at v=0.5 (p=0.064), and its SGD decorrelate-arm magnitude is
+significantly *larger* than its Adam counterpart at both levels
+(p=0.012, p=0.022). This is the opposite of what an "Adam's momentum
+inflates the effect" concern would predict (that would predict SGD
+*smaller* or *equal*, never larger). It is consistent with, and likely
+explained by, the limitation flagged before this experiment was run: at
+the same learning rate, SGD without momentum learns much more slowly
+overall (checked directly: this condition's acquisition-phase
+`proxy_dependence` under SGD is roughly an order of magnitude smaller
+than under Adam, ~0.01-0.02 vs. ~0.19-0.21, for comparable seeds) --
+`neural_interaction_only` under SGD may simply still be in an early,
+noisier part of training when the metric is read, where the decorrelate
+and naive arms have not yet converged to a stable comparison, rather than
+genuinely "more persistent." This is offered as the likely explanation,
+not confirmed, and is exactly the kind of ambiguity the pre-registration's
+own limitation (learning rate not re-tuned for SGD) anticipated.
+
+Net reading: the primary, pre-registered question -- does `neural_raw`'s
+effect survive removing momentum -- is answered cleanly and favorably
+(yes, at both levels). The secondary `neural_interaction_only` result is
+real in the data but should not be over-interpreted given the
+undertraining caveat; a learning-rate-matched (not LR-identical) SGD
+sweep, finding an SGD learning rate that reaches comparable acquisition
+`proxy_dependence` to Adam before comparing decorrelate-vs-naive, is the
+natural follow-up to resolve it, and is noted here but not undertaken as
+part of this experiment. This addendum does not change the criteria or
+verdict above.
