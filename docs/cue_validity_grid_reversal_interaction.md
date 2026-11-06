@@ -74,3 +74,31 @@ Null or non-surviving results are valid, reportable outcomes.
 
 Nothing above will change after results are inspected, following the
 same discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Reversal: confirmed, decisively, even after correction.**
+`linear_raw`'s reversal fraction-adapted (0.975, 0.876) is significantly
+larger than its decorrelation fraction-adapted (0.467, 0.419) at both
+validity levels, p<0.0001 both (Holm-adjusted p<0.0001 both, Cohen's
+d=5.84/2.09). The gradient-asymmetry mechanism replicates in the grid
+environment, completing the pattern already shown in the original
+environment.
+
+**Interaction-only: coordinate-dependent, own effect borderline.** The
+coordinate-dependence test (`linear_raw`'s gap vs.
+`linear_interaction_only`'s) is decisive (p<0.0001 both levels, survives
+correction). `linear_interaction_only`'s own decorrelate-vs-naive effect
+(0.042/0.028 and 0.013/0.028) does not survive Holm correction within its
+own 2-cell family (raw p=0.044/0.031, adjusted 0.063/0.063) -- a
+borderline-to-null own effect, smaller than `linear_raw`'s (0.056-0.106
+in the main cross-environment report). This is consistent with, and
+extends, the original environment's graded-effect finding: removing
+direct coordinate access shrinks the effect in this environment too.
+
+Net result: the grid environment now reproduces every piece of the
+original environment's story -- tabular null, linear strong under both
+decorrelation and reversal, a smaller/borderline effect once direct
+coordinate access is removed -- holding up under the same
+multiple-comparison correction standard applied throughout this
+session.
