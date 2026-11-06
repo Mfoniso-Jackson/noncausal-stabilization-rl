@@ -1,0 +1,5 @@
+condition,validity,decorrelate_mean,naive_mean,t_stat,p_value,cohens_d,has_effect
+tabular,0.5,0.027981,0.020671,1.172944,0.250701,0.443331,False
+tabular,0.95,0.028241,0.020671,1.281482,0.210535,0.484354,False
+linear_raw,0.5,0.05628,0.010911,16.200116,0.0,6.12306,True
+linear_raw,0.95,0.105535,0.010911,14.404459,0.0,5.444371,True

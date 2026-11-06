@@ -118,3 +118,34 @@ replication.
 Nothing in the metrics, conditions, or criteria above will change after
 results are inspected, following the same discipline as every prior
 pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**All three criteria are met cleanly.** `linear_raw` shows a significant
+decorrelate-vs-naive gap at both non-floor validity levels (p<0.0001 both,
+Cohen's d=6.12 at v=0.5, d=5.44 at v=0.95 -- large effects, comparable in
+scale to the original environment's `linear_raw`/`linear_orthogonal`
+results). `tabular` shows no significant gap at either level (p=0.25,
+0.21). The floor control shows no spurious effect for either condition
+(p=0.35, 0.29). **The publication plan's Go/No-Go "proceed to full paper"
+condition is met by this experiment's own pre-registered terms.**
+
+This is a materially stronger and more decisive result than merely
+"replicates" -- the effect sizes here (d=5.4-6.1) are among the largest
+in the entire lineage, and the pattern (null under tabular, large
+significant effect under linear, no floor artifact) reproduces exactly,
+in a task that required the agent to learn real multi-step spatial
+navigation to even reach the decision point, not just a trivial phase
+countdown. This substantially strengthens the claim that the persistence
+phenomenon is about representation (shared, parametric value estimates
+leaking across differently-cued contexts), not an artifact of
+`CueValidityEnv`'s specific, structurally minimal task design.
+
+What this does not yet establish: reversal, neural agents, and
+interaction-only encoding were explicitly deferred in this environment
+(see Design); the graded pattern found in the original environment
+(shrinking under either factor, vanishing under both) is not yet checked
+here. These remain natural follow-ups, now with a strong prior that they
+will reproduce, but not confirmed. This addendum does not change the
+criteria above; the verdict stands exactly as the pre-registered test
+computed it.
