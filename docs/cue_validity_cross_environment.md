@@ -189,23 +189,37 @@ fully washes out within the 1500-episode intervention budget, unlike
 `linear_raw`'s large retained gap.
 
 A plausible, **not confirmed**, explanation: this grid environment's
-episodes are far longer than `CueValidityEnv`'s (~9 navigation steps to
-reach the decision cell, vs. one step to the single decision phase), and
-`NeuralAgentWrapper.train_step()` runs every `TRAIN_EVERY_STEPS=4` env
-steps regardless of phase -- so the same nominal 1500-episode
-intervention budget delivers roughly an order of magnitude more gradient
-updates here than in the original environment. If persistence depends on
-the ratio of residual bias to accumulated corrective training signal
-(the gradient-asymmetry account this lineage has used throughout), a much
-higher effective training-step count per nominal episode would wash out
-a neural agent's bias proportionally faster, while leaving `linear_raw`
-less affected (a smaller, better-conditioned parameter space that was
-already known to retain its bias more strongly). This was not
-anticipated when this extension was designed, is offered here as a
-hypothesis consistent with (not contradicting) the gradient-asymmetry
-account, and would need a budget matched by gradient-step count rather
-than episode count to actually test -- noted as a follow-up, not
-undertaken here. This result narrows the cross-environment replication's
-confirmed scope to `tabular` (null, as expected) and `linear_raw`
-(strong, confirmed effect); `neural_raw`'s result in this specific
-environment and budget is a genuine null, reported as such.
+episodes are longer than `CueValidityEnv`'s (measured directly: 9 steps
+to reach the decision cell via an optimal path, vs. 5 steps to the single
+decision phase there), and `NeuralAgentWrapper.train_step()` runs every
+`TRAIN_EVERY_STEPS=4` env steps regardless of phase -- so the same
+nominal 1500-episode intervention budget delivers roughly **1.8x** more
+gradient updates here than in the original environment.
+
+**Correction (same day, before any further data collection): the
+paragraph above originally claimed "roughly an order of magnitude more
+gradient updates," written from an unverified estimate rather than a
+direct measurement. Measuring it directly gives 9 vs. 5 steps per
+episode -- about 1.8x, not ~10x.** A 1.8x difference in training-call
+count is a much weaker candidate for explaining a swing from a large,
+significant effect to a complete null (0.010 vs. 0.008, statistically
+indistinguishable) than an order-of-magnitude difference would have been,
+so this explanation is downgraded from "plausible" to "probably not
+sufficient on its own." A second, more specific hypothesis, also **not
+confirmed**: in `CueValidityEnv`, the network's input features serve the
+decision alone (the environment requires no real control/navigation
+skill -- action is ignored entirely before the target phase), so acquired
+weights connecting the cue feature to the causal action's output are not
+competing with any other learned function. In `CueValidityGridEnv`, the
+same shared network must also represent a real navigation policy (using
+the x/y position features on most of each episode's steps), and every
+training batch mixes navigation-step transitions with decision-step
+transitions through the same weights -- this capacity-sharing/interference
+could make the cue-dependent weight component less entrenched and faster
+to overwrite under decorrelation's corrective signal, independent of raw
+step count. Distinguishing between these (or finding a different cause
+entirely) would need a dedicated follow-up, which was not undertaken as
+part of this extension. This result narrows the cross-environment
+replication's confirmed scope to `tabular` (null, as expected) and
+`linear_raw` (strong, confirmed effect); `neural_raw`'s result in this
+specific environment and budget is a genuine null, reported as such.
