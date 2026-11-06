@@ -243,3 +243,24 @@ the step-count hypothesis is supported; if it still shows no effect, the
 step-count hypothesis is not supported (consistent with the capacity-
 sharing hypothesis, or another unidentified cause) and this is reported
 as such, not reframed.
+
+### Result
+
+**Step-count hypothesis supported.** At the reduced, step-matched
+intervention budget, `neural_raw` shows a significant decorrelate-vs-
+naive effect at both validity levels (decorrelate=0.027 vs. naive=0.011,
+t=3.010, p=0.0055, d=1.14 at v=0.5; decorrelate=0.031 vs. naive=0.011,
+t=3.465, p=0.0017, d=1.31 at v=0.95) -- reversing the earlier null. The
+naive control's value barely moved (0.011 here vs. 0.008 at the full
+budget), so this is not simply "both arms are now undertrained noise";
+the gap specifically opened up. The recovered effect (0.027-0.031) is
+still noticeably smaller in absolute magnitude than `linear_raw`'s
+(0.056-0.106) at the same validity levels, which extends -- rather than
+complicates -- this lineage's established graded-effect finding
+(`neural_raw` persistent but smaller than `linear_raw`) to this second
+environment, now that the training budget has been matched well enough
+to detect it. The earlier null was a budget artifact specific to
+matching nominal episode count across environments with different
+episode lengths, not evidence that neural agents behave differently in
+this task; this is the corrected, final characterization for this
+environment.
