@@ -152,3 +152,31 @@ the verdict stands exactly as the pre-registered test computed it
 `neural_raw` specifically (closest to significance) is the natural
 follow-up noted here but not undertaken as part of this experiment, per
 the discipline of this lineage.
+
+## Seed top-up for `neural_raw` (pre-registered before additional data collection)
+
+Written and committed before any of the 15 additional seeds below are run.
+Scope: **`neural_raw` only**, both validity levels (0.5 and 0.95) -- not
+`linear_interaction_only` (already significant) or `neural_interaction_only`
+(no directional trend to chase). 15 new seeds (integers 15-29, disjoint
+from the original run's 0-14) are added to the `reversed` and
+`naive_reversed` arms only, using the exact same code path
+(`run_reversed_arm` / `run_naive_reversed_arm` in
+`experiments/cue_validity_neural_reversal_experiment.py`). The
+decorrelation-side baseline is **not** re-run or extended; it continues to
+reuse the nonlinear experiment's original 15 seeds from
+`results/cue_validity_nonlinear_summaries.csv`, unchanged, as in the
+original comparison.
+
+The combined 30-seed reversal-arm result is compared against the same
+15-seed decorrelation-arm baseline using the identical test
+(`analysis.stats.compare_groups`, independent two-sample t-test,
+`scipy.stats.ttest_ind`, p < 0.05, Cohen's d reported) and the identical
+pre-registered success criterion from the section above (asymmetry
+supported if reversal fraction-adapted is significantly larger than
+decorrelation fraction-adapted). No other analysis choice changes.
+
+This is reported as what it is -- a planned, disclosed increase in sample
+size for the one condition flagged as borderline, decided before seeing
+whether the additional seeds move the result past the threshold -- not as
+a fresh, independent test.
