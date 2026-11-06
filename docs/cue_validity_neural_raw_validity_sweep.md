@@ -87,3 +87,44 @@ headroom is largest.
 Nothing in the metrics, conditions, or criteria above will change after
 results are inspected, following the same discipline as every prior
 pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Primary test, as pre-registered**: r = 0.8413, p = 0.0740 across the 5
+validity levels. By the pre-specified p < 0.05 threshold, the headroom
+hypothesis is **not supported** -- despite a visually strong correlation,
+it does not cross the significance bar this document committed to in
+advance, and with n=5 that bar was always going to be hard to clear. This
+is reported as the honest result of the primary test, not rounded up to
+"supported" because the correlation looks large.
+
+Inspecting the five-point table itself shows the headroom explanation was
+likely the wrong mechanism, even though the correlation number is
+suggestive: **headroom barely moves** across the sweep (0.102 to 0.115,
+all five points within about 1 percentage point of each other) --
+`neural_raw` sits at roughly the same distance from the adaptation ceiling
+under decorrelation regardless of validity. What *does* move, cleanly and
+monotonically among the four 15-seed points, is the **statistical
+detectability** of the asymmetry effect: p-value falls from 0.087 (v=0.6)
+to 0.056 (v=0.75) to 0.043 (v=0.9), and Cohen's d rises from 0.670 to
+0.753 to 0.801 across the same three points, before dropping slightly to
+0.733 at v=0.95 (30 seeds). The raw asymmetry effect (mean difference in
+fraction adapted) itself does not show a clean trend -- it is 0.046, 0.070,
+0.069, 0.062, 0.054 across the five levels, bouncing within a narrow band
+rather than climbing -- so the increasing significance looks more
+consistent with validity reducing cross-seed noise in the estimate than
+with validity increasing the size of the effect itself. This is a new,
+purely descriptive observation, not pre-registered, offered as a
+plausible explanation worth a dedicated variance-decomposition check
+rather than as a confirmed finding.
+
+Net reading: the specific headroom-based explanation offered after the
+seed top-up does not hold up under a direct test and should be dropped.
+The earlier "validity modulates whether the asymmetry is detectable"
+observation survives in a weaker, more honest form -- detectability does
+increase with validity across these five points -- but the *reason* is
+now an open question (noise reduction vs. a small, hard-to-resolve genuine
+effect-size change) rather than the headroom story this experiment was
+designed to test. This addendum does not change the criteria above; the
+primary verdict is "not supported" exactly as the pre-registered test
+computed it.
