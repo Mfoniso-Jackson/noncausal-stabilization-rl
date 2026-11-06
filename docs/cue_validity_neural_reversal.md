@@ -209,3 +209,24 @@ new, was not pre-registered, and would need its own targeted test (e.g. a
 denser validity sweep for `neural_raw` specifically) before being reported
 as more than a plausible post-hoc observation. This addendum does not
 change the criteria or the original 15-seed verdict reported above.
+
+## Correction (added later, after a multiple-comparison correction pass; see docs/multiple_comparison_correction.md)
+
+Every "supported"/significant verdict reported above for this
+experiment's own pre-registered family of 6 comparisons (3 conditions x
+2 validity levels: `linear_interaction_only`, `neural_raw` (via the seed
+top-up), `neural_interaction_only`, each at v=0.5 and v=0.95) **does not
+survive Holm-Bonferroni correction applied across that family.**
+`linear_interaction_only`'s p=0.0237/0.0190 adjust to 0.095/0.095;
+`neural_raw`'s topped-up p=0.0143 (v=0.95) adjusts to 0.086. None of the
+6 cells clear alpha=0.05 after correction. This reverses this document's
+own "the asymmetry is supported there" language for `linear_interaction_only`
+and the topped-up `neural_raw` result -- both should now be read as
+**not significant after correction**, pending a better-powered rerun.
+This does not affect the original reversal experiment's finding for
+`linear_raw`/`linear_orthogonal` (a separate pre-registered family,
+which survives correction cleanly) or the core proxy-dependence result;
+it affects only this experiment's extension to the three additional
+conditions tested here. The uncorrected numbers and verdicts above are
+left as originally written, per this lineage's own rule against editing
+settled results after the fact; this correction is additive.
