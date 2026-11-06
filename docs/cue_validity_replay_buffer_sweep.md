@@ -54,3 +54,22 @@ the significance bar.
 
 Nothing above will change after results are inspected, following the
 same discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Staleness exclusion holds at every tested buffer size** (p<0.0001, all
+8 cells). Effect size increases monotonically with buffer size at both
+validity levels: Cohen's d = 5.87, 6.98, 12.18, 15.49 (buffer 500, 2000,
+8000, 20000) at v=0.5, and 10.99, 13.28, 23.59, 35.29 at v=0.95. This
+monotonic trend is descriptive, not part of the pre-registered criterion
+(which only required every size to clear significance), but is worth
+noting: a larger buffer retains more of the acquisition-phase experience
+for longer, which could mechanically increase the measured residual
+gap's size without being "staleness" in the sense the exclusion test was
+designed to rule out (a buffer so large that genuinely-stale,
+pre-decorrelation-labelled transitions are still being resampled late
+into the post-intervention period would show this exact monotonic
+pattern). The effect is robustly present even at the smallest buffer
+(500, less than one episode's worth of acquisition transitions' typical
+count), which is the decisive point for the exclusion itself: the
+phenomenon is not an artifact of one particular buffer size.
