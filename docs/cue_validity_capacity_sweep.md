@@ -58,3 +58,18 @@ not a new comparison against `tabular`/`linear_raw`.
 
 Nothing above will change after results are inspected, following the
 same discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Monotonic non-increasing, cleanly, at both validity levels.** Cohen's d
+falls smoothly from 1.85 (width 8) to 0.23 (width 128) at v=0.5, and from
+2.23 to 0.63 at v=0.95 -- a proper capacity curve, not just two endpoints.
+The decorrelate-vs-naive effect is significant (uncorrected) at widths 8,
+16, and 32 at both validity levels, and at width 64 only at v=0.95; width
+128 shows no effect at either level. This turns the single
+previously-tested architecture (width 32, already known to show a
+significant-but-smaller-than-linear effect) into a proper dose-response
+curve: persistence shrinks continuously with capacity rather than
+dropping off a cliff, consistent with this lineage's "graded, not binary"
+framing throughout. See `docs/multiple_comparison_correction.md` for this
+family's results after Holm-Bonferroni correction.
