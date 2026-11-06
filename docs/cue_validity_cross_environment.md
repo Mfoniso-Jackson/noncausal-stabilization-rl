@@ -223,3 +223,23 @@ part of this extension. This result narrows the cross-environment
 replication's confirmed scope to `tabular` (null, as expected) and
 `linear_raw` (strong, confirmed effect); `neural_raw`'s result in this
 specific environment and budget is a genuine null, reported as such.
+
+### Step-count-matched retest (pre-registered before running; weak hypothesis, cheap to check)
+
+Written before this retest's data is collected. Given the step-count
+difference is only ~1.8x (corrected above), this retest is **not**
+expected to recover the effect and is run mainly to rule the step-count
+hypothesis in or out cheaply, not because it is the leading explanation.
+Design: `neural_raw` only, same `cue_validity` levels {0.5, 0.95}, same
+15 seeds, same 5000-episode acquisition (unchanged, so the acquired bias
+magnitude is comparable), but the post-intervention budget is reduced to
+**800 episodes in 16 blocks of 50** (vs. 1500/30 above) -- chosen so that
+total intervention-phase training calls (episodes x ~9 steps / 4 =
+~1800) approximately matches the original environment's 1500-episode
+budget (1500 x ~5 steps / 4 = ~1875 calls), rather than matching nominal
+episode count. **Success criterion**: if `neural_raw` now shows a
+significant decorrelate-vs-naive effect at >=1 non-floor validity level,
+the step-count hypothesis is supported; if it still shows no effect, the
+step-count hypothesis is not supported (consistent with the capacity-
+sharing hypothesis, or another unidentified cause) and this is reported
+as such, not reframed.
