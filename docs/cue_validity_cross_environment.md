@@ -149,3 +149,29 @@ here. These remain natural follow-ups, now with a strong prior that they
 will reproduce, but not confirmed. This addendum does not change the
 criteria above; the verdict stands exactly as the pre-registered test
 computed it.
+
+## Extension: neural_raw in the grid environment (pre-registered before running)
+
+Written and committed before this extension's data is collected. Scope:
+add a **`neural_raw`** condition (the same `NeuralAgentWrapper`/`MLPQNet`
+2-hidden-layer architecture from
+`experiments/cue_validity_nonlinear_experiment.py`, over
+`CueValidityGridEnv.observation_vector()`'s 6 raw features) to this
+experiment, decorrelate intervention only, same `cue_validity` levels
+{0.0, 0.5, 0.95}, same 15 seeds, same episode budget (5000 acquisition,
+1500 post-intervention in 30 blocks of 50) as `tabular`/`linear_raw`
+above. `tabular` and `linear_raw` are not re-run; this extension's
+comparison reuses their already-committed results directly.
+Interaction-only encoding and reversal in this environment remain
+deferred past this extension too.
+
+**Success criterion (fixed before data collection)**: `neural_raw` shows a
+significant decorrelate-vs-naive gap (`compare_groups`, p < 0.05,
+decorrelate magnitude greater than naive) at at least one non-floor
+validity level, consistent with (not necessarily identical in magnitude
+to) `linear_raw`'s result above -- extending "the graded pattern
+replicates" to a second representation class in the new environment. The
+floor control must show no spurious effect for `neural_raw`, matching the
+criterion already applied to the other two conditions. A null result for
+`neural_raw` here is a valid, reportable outcome and would narrow the
+cross-environment claim to linear agents specifically in this task.
