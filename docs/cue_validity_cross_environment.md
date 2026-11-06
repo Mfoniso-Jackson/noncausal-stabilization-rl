@@ -175,3 +175,37 @@ floor control must show no spurious effect for `neural_raw`, matching the
 criterion already applied to the other two conditions. A null result for
 `neural_raw` here is a valid, reportable outcome and would narrow the
 cross-environment claim to linear agents specifically in this task.
+
+### Result
+
+**Criterion not met.** `neural_raw` shows no significant decorrelate-vs-
+naive gap at either non-floor validity level (p=0.9986 at v=0.5, p=0.3299
+at v=0.95); the floor control is clean (p=0.1839, no spurious effect).
+Acquisition-phase `proxy_dependence` does form normally (~0.19 at
+v=0.95, checked directly, comparable to `tabular`/`linear_raw`'s own
+acquisition values), but the decorrelate arm's final value (0.010) is
+statistically indistinguishable from naive (0.008) -- the dependency
+fully washes out within the 1500-episode intervention budget, unlike
+`linear_raw`'s large retained gap.
+
+A plausible, **not confirmed**, explanation: this grid environment's
+episodes are far longer than `CueValidityEnv`'s (~9 navigation steps to
+reach the decision cell, vs. one step to the single decision phase), and
+`NeuralAgentWrapper.train_step()` runs every `TRAIN_EVERY_STEPS=4` env
+steps regardless of phase -- so the same nominal 1500-episode
+intervention budget delivers roughly an order of magnitude more gradient
+updates here than in the original environment. If persistence depends on
+the ratio of residual bias to accumulated corrective training signal
+(the gradient-asymmetry account this lineage has used throughout), a much
+higher effective training-step count per nominal episode would wash out
+a neural agent's bias proportionally faster, while leaving `linear_raw`
+less affected (a smaller, better-conditioned parameter space that was
+already known to retain its bias more strongly). This was not
+anticipated when this extension was designed, is offered here as a
+hypothesis consistent with (not contradicting) the gradient-asymmetry
+account, and would need a budget matched by gradient-step count rather
+than episode count to actually test -- noted as a follow-up, not
+undertaken here. This result narrows the cross-environment replication's
+confirmed scope to `tabular` (null, as expected) and `linear_raw`
+(strong, confirmed effect); `neural_raw`'s result in this specific
+environment and budget is a genuine null, reported as such.
