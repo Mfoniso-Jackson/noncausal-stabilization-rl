@@ -37,6 +37,7 @@ comparison twice.
 | Proxy-dependence (criterion 1) | 6 | `linear_raw` and `linear_orthogonal`, both validity levels (4/6); `tabular` does not (expected null) |
 | Reversal (pre-registered raw-gap) | 6 | `linear_raw` and `linear_orthogonal`, both validity levels (4/6); `tabular` does not. (Significance here reflects the gaps reliably *differing*, in the direction the pre-registered criterion itself judged as not supporting the hypothesis -- see that experiment's own report.) |
 | Nonlinear (coordinate-dependence test) | 4 | `linear` architecture, both validity levels; `neural` survives only at v=0.5 (p=0.021 -> adjusted 0.042), not at v=0.95 (already non-significant before correction) |
+| Nonlinear (own decorrelate-vs-naive effect, H4's basis) | 6 | `linear_interaction_only` and `neural_raw`, both validity levels (4/6); `neural_interaction_only` does not (already non-significant before correction). H4's claim is unaffected by correction. |
 | **Neural reversal (pre-registered normalized)** | 6 | **None.** See correction below -- this reverses an earlier reported result. |
 | Optimizer ablation (primary) | 4 | `neural_raw` both validity levels; `neural_interaction_only` only at v=0.95 |
 | Replay buffer sweep | 8 | All 8 (every p-value was already <0.0001 before correction) |

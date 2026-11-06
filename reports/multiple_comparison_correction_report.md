@@ -40,6 +40,17 @@ Policy and interpretation: docs/multiple_comparison_correction.md.
 | neural_v0.5 | 0.020994 | 0.041988 | True |
 | neural_v0.95 | 0.061480 | 0.061480 | False |
 
+## Nonlinear (own decorrelate-vs-naive effect, H4's basis) (n=6)
+
+| cell | raw p | holm-adjusted p | survives (alpha=0.05) |
+|---|---:|---:|---|
+| linear_interaction_only_v0.5 | 0.000000 | 0.000000 | True |
+| linear_interaction_only_v0.95 | 0.000000 | 0.000000 | True |
+| neural_raw_v0.5 | 0.009544 | 0.028632 | True |
+| neural_raw_v0.95 | 0.000191 | 0.000764 | True |
+| neural_interaction_only_v0.5 | 0.978032 | 0.978032 | False |
+| neural_interaction_only_v0.95 | 0.062669 | 0.125338 | False |
+
 ## Neural reversal (pre-registered normalized, neural_raw via topup) (n=6)
 
 | cell | raw p | holm-adjusted p | survives (alpha=0.05) |

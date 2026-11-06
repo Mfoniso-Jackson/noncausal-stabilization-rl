@@ -49,6 +49,26 @@ def build_families():
     rows = read("cue_validity_nonlinear_coordinate_test.csv")
     families["Nonlinear (coordinate-dependence test)"] = [(f"{r['architecture']}_v{r['validity']}", float(r["p_value"])) for r in rows]
 
+    # Nonlinear's own per-condition decorrelate-vs-naive effect (H4's evidentiary
+    # basis), recomputed from the raw summaries since no criteria CSV was
+    # committed for this specific table.
+    import sys as _sys
+    _sys.path.insert(0, ROOT)
+    from experiments.cue_validity_nonlinear_experiment import NEW_CONDITIONS, VALIDITY_LEVELS as NL_VALIDITY, new_condition_gap, gap_summary
+    nl_rows = read("cue_validity_nonlinear_summaries.csv")
+    for row in nl_rows:
+        row["validity"] = float(row["validity"])
+        row["seed"] = int(row["seed"])
+        for k in ("acquisition_cds", "acquisition_proxy_dependence", "final_cds", "final_proxy_dependence"):
+            row[k] = None if row[k] in ("", "None") else float(row[k])
+    entries = []
+    for condition in NEW_CONDITIONS:
+        for validity in NL_VALIDITY:
+            decorrelate, naive = new_condition_gap(nl_rows, condition, validity)
+            g = gap_summary(decorrelate, naive)
+            entries.append((f"{condition}_v{validity}", g["p_value"]))
+    families["Nonlinear (own decorrelate-vs-naive effect, H4's basis)"] = entries
+
     rows = read("cue_validity_neural_reversal_normalized.csv")
     entries = [(f"{r['condition']}_v{r['validity']}", float(r["p_value"])) for r in rows if r["condition"] != "neural_raw"]
     topup_rows = read("cue_validity_neural_raw_topup_normalized.csv")
