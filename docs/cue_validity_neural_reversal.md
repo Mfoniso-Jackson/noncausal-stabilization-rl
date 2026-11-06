@@ -180,3 +180,32 @@ This is reported as what it is -- a planned, disclosed increase in sample
 size for the one condition flagged as borderline, decided before seeing
 whether the additional seeds move the result past the threshold -- not as
 a fresh, independent test.
+
+### Seed top-up result
+
+At 30 reversal seeds (vs. the unchanged 15-seed decorrelation baseline):
+`neural_raw` at validity=0.95 now reaches significance (reversal
+fraction-adapted 0.947 vs. decorrelation's 0.894, t=2.554, p=0.0143,
+Cohen's d=0.733) -- the asymmetry is supported there. At validity=0.5 it is
+still not significant (0.944 vs. 0.898, t=1.227, p=0.2264) -- weaker, not
+stronger, than the original 15-seed estimate at that level (p=0.1678),
+which is consistent with ordinary seed-to-seed variance rather than any
+error, given both estimates are in the same ballpark and neither was
+close to the threshold.
+
+Taken together: the gradient-asymmetry mechanism is now supported for
+`neural_raw` at the higher validity level (0.95) and remains unsupported
+at the lower one (0.5) even with doubled power. This is a more qualified
+finding than a clean replication -- `neural_raw` behaves like
+`linear_interaction_only` (asymmetry present) at v=0.95 but not at v=0.5,
+while `linear_interaction_only` showed the asymmetry at both levels. A
+plausible reading is that validity, like representation, is a continuous
+factor in how much headroom below the adaptation ceiling is available for
+reversal to show its advantage over decorrelation (lower validity means a
+weaker original cue-state association, hence less to unlearn and adapt
+faster at either arm) -- consistent with this experiment's broader
+"graded property" framing, but this specific validity-dependence claim is
+new, was not pre-registered, and would need its own targeted test (e.g. a
+denser validity sweep for `neural_raw` specifically) before being reported
+as more than a plausible post-hoc observation. This addendum does not
+change the criteria or the original 15-seed verdict reported above.
