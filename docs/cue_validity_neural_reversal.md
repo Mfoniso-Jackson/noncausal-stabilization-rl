@@ -110,3 +110,45 @@ reportable outcome.
 Nothing in the metrics, conditions, or criteria above will change after
 results are inspected, following the same discipline as the three prior
 pre-registrations in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+Result, by the pre-registered fraction-adapted criterion:
+`linear_interaction_only` shows the asymmetry (reversal fraction-adapted
+0.765/0.827 vs. decorrelation's 0.671/0.757, p=0.024/0.019, Cohen's d
+0.90/0.94, both validity levels) -- the mechanism replicates in a third
+linear representation. `neural_raw` and `neural_interaction_only` do not
+reach significance (p=0.17/0.06 and p=0.41/0.77).
+
+Inspecting the per-condition fractions shows why, and it is a ceiling
+effect, not evidence against the mechanism: both neural conditions are
+already adapting to **0.89-1.01** of the required change under
+decorrelation alone (vs. `linear_interaction_only`'s 0.67-0.76), leaving
+little headroom for reversal to show a detectably larger fraction via this
+normalized metric. This is consistent with, not contrary to, the parent
+nonlinear experiment's own finding that neural representations carry a
+*smaller* decorrelate-vs-naive persistence effect than linear ones in the
+first place -- there is less residual dependency left for reversal to
+extinguish faster. `neural_raw`'s direction is still consistent with the
+mechanism (reversal fraction numerically higher at both validity levels,
+0.946-0.966 vs. 0.894-0.898, borderline at v=0.95, p=0.0615) but
+underpowered at 15 seeds given how little variance remains once both arms
+are this close to full adaptation. `neural_interaction_only` shows no
+directional trend either way (p=0.41/0.77), exactly as the pre-registration
+anticipated for a condition with no decorrelate-vs-naive effect to begin
+with.
+
+Net picture across both experiments in this sub-lineage: the
+gradient-asymmetry mechanism and the graded-persistence finding are not
+independent -- they interact. Representations with more room below the
+adaptation ceiling (linear, raw-coordinate-accessible) show both larger
+persistence under decorrelation *and* a clearer reversal-vs-decorrelation
+asymmetry; representations closer to the ceiling (neural, or
+interaction-only) show smaller persistence and a correspondingly harder
+asymmetry to detect with the same seed count, not an absence of the
+underlying mechanism. This addendum does not change any criterion above;
+the verdict stands exactly as the pre-registered test computed it
+(supported for `linear_interaction_only` only). A seed-count increase for
+`neural_raw` specifically (closest to significance) is the natural
+follow-up noted here but not undertaken as part of this experiment, per
+the discipline of this lineage.
