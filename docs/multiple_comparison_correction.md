@@ -40,7 +40,7 @@ comparison twice.
 | **Neural reversal (pre-registered normalized)** | 6 | **None.** See correction below -- this reverses an earlier reported result. |
 | Optimizer ablation (primary) | 4 | `neural_raw` both validity levels; `neural_interaction_only` only at v=0.95 |
 | Replay buffer sweep | 8 | All 8 (every p-value was already <0.0001 before correction) |
-| Capacity sweep | -- | Added once available (see note in script; this document will be updated) |
+| Capacity sweep | 10 | Widths 8, 16, 32 at both validity levels (6/10); width 64 does not survive at either level after correction (v=0.95's raw p=0.0147 adjusts to 0.059, just missing); width 128 was already null |
 
 Full per-cell raw and Holm-adjusted p-values are in the analysis script
 output, reproduced in `reports/multiple_comparison_correction_report.md`.
@@ -74,6 +74,17 @@ flagged as a correction to `docs/cue_validity_neural_reversal.md` and to
 any summary (including the publication plan) that reported the
 `linear_interaction_only` or topped-up `neural_raw` results as
 "supported" without this correction.
+
+## Capacity sweep, after correction
+
+The capacity sweep's own monotonic-decline framing is unaffected by
+correction (effect size itself does not change), but the boundary of
+where the effect stops being statistically detectable tightens: widths
+8, 16, and 32 survive correction at both validity levels; width 64 -- 
+significant before correction at v=0.95 (p=0.0147) -- does not survive
+(adjusted p=0.059, just missing). The honest statement is therefore "the
+effect is detectable through width 32 and not reliably beyond it," not
+"through width 64," once the full 10-cell family is corrected together.
 
 ## What this changes in the overall claim
 

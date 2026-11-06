@@ -73,6 +73,21 @@ Policy and interpretation: docs/multiple_comparison_correction.md.
 | buf20000_v0.5 | 0.000000 | 0.000000 | True |
 | buf20000_v0.95 | 0.000000 | 0.000000 | True |
 
+## Capacity sweep (n=10)
+
+| cell | raw p | holm-adjusted p | survives (alpha=0.05) |
+|---|---:|---:|---|
+| w8_v0.5 | 0.000038 | 0.000304 | True |
+| w8_v0.95 | 0.000002 | 0.000020 | True |
+| w16_v0.5 | 0.001488 | 0.008928 | True |
+| w16_v0.95 | 0.000014 | 0.000126 | True |
+| w32_v0.5 | 0.009544 | 0.047720 | True |
+| w32_v0.95 | 0.000191 | 0.001337 | True |
+| w64_v0.5 | 0.138911 | 0.327411 | False |
+| w64_v0.95 | 0.014730 | 0.058920 | False |
+| w128_v0.5 | 0.540633 | 0.540633 | False |
+| w128_v0.95 | 0.109137 | 0.327411 | False |
+
 ## Shuffle/placebo control (excluded from discovery family; success = non-significance)
 
 | validity | raw p (uncorrected; success criterion is p>=0.05) |
