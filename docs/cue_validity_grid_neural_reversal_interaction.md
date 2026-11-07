@@ -79,3 +79,39 @@ Null or non-surviving results are valid, reportable outcomes.
 
 Nothing above will change after results are inspected, following the
 same discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Reversal: confirmed decisively, survives correction at both validity
+levels.** `neural_raw`'s reversal fraction-adapted (1.350, 1.166) exceeds
+its step-matched decorrelation fraction-adapted (0.898, 0.894), p=0.0065/0.0111
+raw, both adjusting to p=0.0131 after Holm correction (Cohen's d=1.11/1.03).
+This completes the grid environment's reversal story: both `linear_raw`
+and `neural_raw` show the gradient-asymmetry mechanism there, matching
+the original environment.
+
+**Interaction-only: coordinate-dependence confirmed at v=0.5, not at
+v=0.95.** The coordinate-dependence test (raw gap vs. interaction-only
+gap) is significant at v=0.5 (p<0.0001, survives correction) but not at
+v=0.95 (p=0.061, does not survive). `neural_interaction_only`'s own
+decorrelate-vs-naive effect does not show the expected direction at
+either level: at v=0.5 its naive arm (0.033) is actually *larger* than
+its decorrelate arm (0.015) -- a significant difference (raw p=0.0097)
+but in the reverse direction, so `has_own_effect` is correctly `False` by
+the pre-registered criterion (which requires the significant difference
+to point the expected way). At v=0.95 there is no significant own effect
+either direction (p=0.74). This reversed-direction result at v=0.5 is
+reported honestly as an unexplained, secondary observation -- it does not
+by itself overturn the coordinate-dependence conclusion at v=0.5 (which
+compares gap *magnitudes* between `neural_raw` and
+`neural_interaction_only`, not the sign of `neural_interaction_only`'s own
+effect), but it means `neural_interaction_only`'s own behavior in this
+environment is less clean than the original environment's version of the
+same condition, and is not further diagnosed here.
+
+**Net picture**: the grid environment now reproduces the original
+environment's full representation x intervention story for `neural_raw`
+(decorrelate, reversal, and partial coordinate-dependence), with one
+honestly-reported loose end (`neural_interaction_only`'s own
+direction-reversed effect at v=0.5) left for a future, more targeted
+investigation rather than smoothed over.

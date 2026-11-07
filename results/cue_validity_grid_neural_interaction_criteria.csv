@@ -1,0 +1,3 @@
+validity,interaction_decorrelate_mean,interaction_naive_mean,own_p_value,own_holm_adjusted_p,own_cohens_d,coordinate_test_p_value,coordinate_holm_adjusted_p,coordinate_test_cohens_d,has_own_effect,coordinate_dependent
+0.5,0.014788,0.033477,0.009681,0.019362,-1.049523,5e-06,1e-05,2.133547,False,True
+0.95,0.036393,0.033477,0.738971,0.738971,0.127201,0.061275,0.061275,0.736964,False,False

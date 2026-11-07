@@ -1,0 +1,3 @@
+validity,reversal_fraction_adapted,decorrelation_fraction_adapted,t_stat,p_value,holm_adjusted_p,cohens_d,asymmetry_supported
+0.5,1.349767,0.898115,2.937758,0.006549,0.013098,1.110368,True
+0.95,1.166149,0.893525,2.72078,0.011068,0.013098,1.028358,True
