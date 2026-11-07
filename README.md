@@ -35,7 +35,7 @@ actually supports a claim.
 |---|---|
 | H1: Non-causal, predictive cues produce measurable behavioural dependence | **Supported** under linear function approximation (p<0.0001, Cohen's d 8–24), **absent** under tabular representation |
 | H2: Cue validity / uncertainty modulates persistence | **Tested, not supported** for a dose-response relationship after multiple-comparison correction — a graded capacity/accessibility relationship was found instead (see H4 row) |
-| H3: An active correction (reversal) produces faster adaptation than a passive one (decorrelation) | **Supported** for `linear_raw`/`linear_orthogonal` (p<0.001 after correction), replicated in a second, structurally different environment (p<0.0001). An extension to three additional representations did **not** survive multiple-comparison correction — reported as a genuine, dated correction, not hidden. |
+| H3: An active correction (reversal) produces faster adaptation than a passive one (decorrelation) | **Supported** for `linear_raw`/`linear_orthogonal` (p<0.001 after correction), replicated in a second, structurally different environment for both `linear_raw` and `neural_raw` (p<0.0001, p=0.0131 after correction respectively). An extension to three additional representations in the *original* environment did **not** survive multiple-comparison correction — reported as a genuine, dated correction, not hidden. |
 | H4: Different representations/algorithms show different patterns | **Supported**, in two distinct ways. (1) *Representation*: effect size is a clean, monotonic function of model capacity (Cohen's d 1.85→0.23 across MLP widths 8–128) and of cue-coordinate accessibility. (2) *Algorithm class, mechanistically*: PPO's `proxy_dependence` (read from policy logits) necessarily collapses toward zero as its policy converges, because nothing in the policy-gradient objective preserves cue-conditioned logit differences once the dominant action's advantage saturates — unlike DQN's Q-values, a regression target that keeps tracking the cue-conditioned expected-return difference indefinitely. After correcting for this (a calibrated acquisition budget, then a total-episode-matched naive control — PPO's own entropy-collapse dynamics confound the standard DQN-style comparison in a way DQN itself doesn't face), PPO shows a small, direction-consistent-with-persistence effect (Cohen's d 0.3–0.5) that 15 seeds cannot distinguish from noise — reported as underpowered, not negative. See `docs/cue_validity_ppo.md` for the full three-stage correction. |
 
 Every claim above is backed by a pre-registered design (metrics and success
@@ -215,5 +215,8 @@ larger model would need, whatever the model class.
   direction-consistent-with-persistence effect (Cohen's d 0.3–0.5) that
   15 seeds cannot resolve from noise. A seed top-up (the standard
   escalation used elsewhere in this lineage) would settle it.
-- Reversal and interaction-only encoding for `neural_raw` specifically in
-  the grid environment have not been tested (only `linear_raw`).
+- `neural_interaction_only`'s own decorrelate-vs-naive effect in the grid
+  environment shows an unexplained reversed direction at v=0.5 (naive >
+  decorrelate, significant but wrong-signed) — the coordinate-dependence
+  conclusion there is unaffected, but this specific result is not
+  diagnosed (`docs/cue_validity_grid_neural_reversal_interaction.md`).
