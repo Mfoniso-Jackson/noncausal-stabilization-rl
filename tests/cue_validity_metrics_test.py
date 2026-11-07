@@ -1,8 +1,11 @@
+import math
+
 from metrics.cue_validity import (
     causal_action_rate,
     cue_dependence_score,
     extinction_half_life,
     persistence_index,
+    policy_entropy,
     proxy_dependence,
     softmax_mass,
 )
@@ -81,6 +84,24 @@ def test_proxy_dependence_positive_when_cue_present_favors_causal_more():
     assert dep > 0.5
 
 
+def test_policy_entropy_zero_when_fully_deterministic():
+    q_values = {CAUSAL: 20.0, CUE: 0.0, NEUTRAL_A: 0.0, NEUTRAL_B: 0.0}
+    entropy = policy_entropy(q_values, AVAILABLE)
+    assert entropy < 0.001
+
+
+def test_policy_entropy_max_when_all_q_equal():
+    q_values = {CAUSAL: 0.0, CUE: 0.0, NEUTRAL_A: 0.0, NEUTRAL_B: 0.0}
+    entropy = policy_entropy(q_values, AVAILABLE)
+    assert abs(entropy - math.log(4)) < 1e-9
+
+
+def test_policy_entropy_between_bounds_for_intermediate_case():
+    q_values = {CAUSAL: 1.0, CUE: 0.5, NEUTRAL_A: 0.0, NEUTRAL_B: -0.5}
+    entropy = policy_entropy(q_values, AVAILABLE)
+    assert 0.0 < entropy < math.log(4)
+
+
 if __name__ == "__main__":
     test_cds_near_zero_when_causal_action_dominates()
     test_cds_near_tie_breaking_floor_when_all_q_equal()
@@ -94,4 +115,7 @@ if __name__ == "__main__":
     test_causal_action_rate_matches_softmax_mass()
     test_proxy_dependence_zero_when_identical_q_values()
     test_proxy_dependence_positive_when_cue_present_favors_causal_more()
+    test_policy_entropy_zero_when_fully_deterministic()
+    test_policy_entropy_max_when_all_q_equal()
+    test_policy_entropy_between_bounds_for_intermediate_case()
     print("All cue_validity metrics tests passed.")

@@ -79,6 +79,20 @@ def persistence_index(pre_cds, post_cds):
     return max(0.0, post_cds / pre_cds)
 
 
+def policy_entropy(q_values, available_actions):
+    """Shannon entropy (nats) of the softmax policy over
+    `available_actions`. 0.0 means the policy has fully collapsed to a
+    single action; `ln(len(available_actions))` is the maximum (uniform)
+    entropy. Used as a check alongside CDS/proxy_dependence: an agent
+    that looks cue-independent because it has simply collapsed to one
+    action everywhere (entropy near 0) is a different situation from one
+    that looks cue-independent because its policy is genuinely
+    cue-insensitive while still exploring (entropy away from 0) -- CDS
+    and proxy_dependence alone cannot distinguish these, this can."""
+    masses = softmax_mass(q_values, available_actions)
+    return -sum(p * math.log(p) for p in masses.values() if p > 1e-12)
+
+
 def extinction_half_life(block_cds_sequence, baseline_cds):
     """First index in block_cds_sequence whose value falls to half of
     baseline_cds or below; len(block_cds_sequence) if it never does
