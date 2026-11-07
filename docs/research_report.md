@@ -1,0 +1,224 @@
+# Non-Causal Stabilization in Reinforcement Learning: Measuring Behavioural Dependence, Persistence and Adaptation Under Uncertainty
+
+*Technical research report. All results below are drawn directly from this repository's committed `results/*.csv` and `reports/*.md` files, each produced by a pre-registered experiment script (design, metrics, and success criteria committed to `docs/` before data collection). No result in this report was generated for it; every number is traceable to a specific experiment and can be reproduced by running the corresponding `experiments/*.py` script. Proposed, not-yet-run work is explicitly marked as such throughout.*
+
+## Abstract
+
+We ask whether reinforcement learning agents develop measurable, persistent behavioural dependence on cues that predict reward during training but are not causally related to it, and whether such dependence survives an intervention that invalidates the cue. Using a family of controlled environments in which a cue correlates with an unobserved hidden state at a swept validity parameter, we find that the answer depends sharply on representation: tabular SARSA(λ) agents show no measurable dependence at all — a structural property of tabular temporal-difference learning, not a tuning failure — while linear and small neural function-approximation agents show large, statistically decisive, pre-registered, intervention-surviving dependence (Cohen's d up to 23.6, p<0.0001). The effect is graded: it shrinks under increased model capacity and under reduced direct access to the cue coordinate, and an active correction to the cue (reversal) produces faster proportional adaptation than a passive one (decorrelation), consistent with a gradient-asymmetry account analogous to error-correction learning rules in the animal-learning literature. The finding replicates in a second, structurally different environment requiring real multi-step spatial navigation, survives an ablation removing the training optimizer's momentum, and survives a placebo control ruling out an artifact of the decorrelation mechanism itself. A parallel investigation of PPO, an on-policy actor-critic algorithm, uncovered a qualitatively different and mechanistically distinct pattern: PPO's behavioural dependence (read from policy logits) follows an inverted-U trajectory and necessarily collapses toward zero as its policy converges, because nothing in the policy-gradient objective preserves cue-conditioned information once the dominant action's advantage saturates — unlike a Q-value-based agent's value function, which remains a stable regression target. After correcting two successive methodological confounds specific to this entropy-collapse dynamic, PPO shows a small, direction-consistent effect that current seed counts cannot distinguish from noise. We also revisit this repository's own pre-existing, pre-session experiments and find that a widely-stated summary characterising them as "consistently null" is inaccurate: several had already found the same effect and set it aside as a representation artifact, one apparent positive is a measurement artifact of a known softmax floor, and the two genuine nulls are now fully explained by a lack of any hidden stochastic variable for their cues to be informative about. We report every statistical correction applied (Holm-Bonferroni within each experiment's own pre-registered family) and every instance in which it overturned an earlier, less rigorously checked conclusion, including our own.
+
+## 1. Introduction
+
+Reinforcement learning agents are trained to maximise reward, not to identify causal structure. When an environment contains a feature that is statistically predictive of reward during training but is not itself a cause of reward, an agent that exploits that feature is behaving rationally with respect to its training distribution while remaining vulnerable to any change in that distribution. This is the RL-specific instance of a broader phenomenon documented across supervised learning as shortcut learning — models that achieve low training loss by latching onto features that correlate with the label for reasons unrelated to the task's intended causal structure, and whose performance can collapse when that correlation is broken at test time.
+
+This report investigates a narrow, carefully scoped version of this question: under what conditions does an RL agent's reliance on a predictive-but-non-causal cue (a) form during training, (b) persist beyond what a naively-initialized learner shows once an intervention removes the cue's predictive value, and (c) adapt differently depending on the nature of the intervention and the agent's representation? We call the persistence phenomenon, when it is found, *non-causal stabilization*.
+
+## 2. Research Motivation
+
+The practical motivation is reliability under distribution shift. An agent, model, or system that has learned to exploit a spurious regularity will perform well as long as that regularity holds and may fail, silently or otherwise, once it stops holding — a concern directly relevant to behavioural robustness evaluation, adaptation to non-stationary environments, and more broadly to the evaluation of adaptive intelligent systems, including but not limited to reinforcement learning agents. This report does not claim that findings from the small, tabular/linear/shallow-neural GridWorld-scale environments studied here generalize directly to large language models or embodied agents; it is offered as a controlled case study in exactly the kind of evaluation discipline — pre-registered hypotheses, naive and floor controls, cross-environment replication, explicit multiple-comparison correction, and transparent reporting of null and confounded results — that evaluation of more complex adaptive systems would need regardless of scale. Section 12 returns to this point explicitly.
+
+## 3. Related Work
+
+*This section draws on general domain knowledge rather than a literature search conducted during this project; no primary sources were retrieved or verified against this session's work, and this is stated explicitly as a limitation in Section 11. Citations are given at the level of author and approximate year rather than page-level detail we have not verified.*
+
+The term "superstition" in a learning-agent context originates with Skinner's classic operant-conditioning demonstration that pigeons receiving food on a fixed schedule, independent of their behaviour, develop and maintain idiosyncratic action sequences — behaviour reinforced by coincidental temporal contiguity with reward rather than by any causal relationship to it. That work motivates the terminology used throughout this project but is a loose motivational analogy rather than a formal model: Skinner's pigeons were operating under continuous reinforcement scheduling, not an explicit hidden-state inference problem, and the mechanism we identify here (a gradient-asymmetry between acquisition and extinction) is better matched by later, more formal associative-learning theory.
+
+The Rescorla-Wagner model of classical conditioning — an error-correction learning rule in which associative strength is updated in proportion to the discrepancy between predicted and received reinforcement — is a closer theoretical match to the gradient-asymmetry mechanism this report identifies (Section 10.3): a cue that is actively, consistently wrong (our "reversal" intervention) produces a large, consistent prediction error and a correspondingly fast update, while a cue that has simply become uninformative (our "decorrelation" intervention) produces a near-zero-mean, unstructured error signal with no consistent corrective direction. The broader extinction, renewal, and spontaneous-recovery literature associated with work on conditioned responding (commonly associated with Bouton and colleagues) documents that extinguished associations are suppressed rather than erased and can re-emerge under context change — a caution this report takes seriously when describing any effect as "extinguished" rather than merely "below the floor of our current measurement."
+
+Within machine learning, the shortcut-learning framing (prominently associated with a 2020 survey by Geirhos and colleagues) describes the general phenomenon of models exploiting training-distribution-specific correlations; this report is best read as an RL-specific, intervention-based operationalization of that broader concern, with the specific contribution of distinguishing genuine persistence from ordinary slow re-convergence via explicit naive-control and floor-control comparisons (Section 6).
+
+## 4. Formal Problem Definition
+
+### 4.1 Environment family
+
+The primary environment, `CueValidityEnv` (`env/cue_validity_env.py`), is a fixed-horizon partially observable Markov decision process. At the start of each episode, a hidden state `h ∈ {0, 1}` is sampled i.i.d. Bernoulli(0.5) and is never included in the agent's observation. A cue bit is sampled once per episode with
+
+```
+P(cue=1 | h=1) = 0.5 + 0.45·v
+P(cue=1 | h=0) = 0.5 − 0.45·v
+```
+
+for a swept parameter `v ∈ [0, 1]`, the *cue validity* (`v=0`: cue carries no information; `v≈1`: cue is near-perfectly informative). The cue is observed only at a designated decision phase. At that same phase, one designated action (`ACTION_CAUSAL`) yields reward `+1` if and only if `h=1`; a second, cue-associated action (`ACTION_CUE`) never yields reward under any condition, in any experiment; two further actions are neutral. The cue never affects reward, transition dynamics, or action availability in any condition — this is fixed for the lifetime of the environment and is not altered by any intervention.
+
+Two interventions are defined, applied mid-training without altering anything else about the environment:
+
+- `decorrelate()`: the cue is resampled at `P(cue=1)=0.5` regardless of `h`, from the call forward.
+- `reverse()`: the cue's correlation with `h` flips sign, same magnitude as during acquisition, from the call forward.
+
+A second, structurally different environment, `CueValidityGridEnv` (`env/cue_validity_grid_env.py`), embeds the identical causal mechanism inside real multi-step 2-D grid navigation: the agent must learn to reach a designated decision cell before the hidden-state-gated choice described above becomes available, so reaching the decision point at all requires genuine spatial credit assignment — unlike `CueValidityEnv`, whose `step()` ignores the agent's action entirely before the decision phase. This environment is used specifically to test whether findings generalize beyond one task's idiosyncratic structure (Section 7.7).
+
+### 4.2 Falsifiable hypotheses
+
+| ID | Hypothesis |
+|---|---|
+| H1 | Under function approximation, post-decorrelation `proxy_dependence` (Section 6) in a pretrained agent exceeds a matched naive control's, at above-floor cue validity. |
+| H2 | This effect is absent under tabular representation. |
+| H3 | An active correction (reversal) produces faster proportional adaptation than a passive one (decorrelation). |
+| H4 | Different representations and algorithms exhibit different patterns of cue dependence and adaptation. |
+| H0 | (Falsification target) RL agents *in general* develop persistent non-causal behavioural dependencies, independent of representation. |
+
+These hypotheses were not fixed in advance of any investigation; they were formalized after an initial repository audit (Section 10.1) found that the originally stated, unscoped version of H0 was not supported by this repository's own pre-existing evidence, and were then tested, in this order, against new data.
+
+## 5. Experimental Methodology
+
+### 5.1 Pre-registration discipline
+
+Every experiment contributing a result in Section 7 has a corresponding `docs/*.md` file stating its design, metrics, and success/failure criteria, committed to version control *before* the corresponding data was collected. Where a flaw in a pre-registered criterion was discovered after seeing results (Section 10), the original document was never edited to remove or alter the original criterion; a dated addendum was appended stating what was found and why, with the original criterion and its own, now-understood-to-be-flawed verdict left visible. This is a deliberate choice to make this report's own reasoning auditable rather than only its conclusions.
+
+### 5.2 Agent classes
+
+| Agent | Description |
+|---|---|
+| Tabular SARSA(λ) | A plain Q-table (`experiments/cue_validity_mve_experiment.py::SarsaLambdaAgent`), eligibility traces, no parameter sharing across states. |
+| Linear (`linear_raw`, `linear_orthogonal`, `linear_interaction_only`) | `agents/dqn_agent.py::DQNAgent`, a dependency-free linear function approximator with a replay buffer and target network, over raw, orthogonally-rotated, or interaction-only (no raw cue coordinate) feature encodings. |
+| Neural (`neural_raw`, `neural_interaction_only`) | A small multi-layer perceptron (2 hidden layers, 32 units by default; swept in Section 9.2), PyTorch, DQN-style training. |
+| PPO | `agents/ppo_agent.py::PPOAgent`, an actor-critic network trained with generalized advantage estimation and the clipped surrogate objective (Schulman et al., 2017), replacing an earlier non-functional stub that returned uniform-random actions. |
+
+### 5.3 Controls
+
+- **Naive control**: a freshly-initialized agent trained only in the post-intervention environment, for the same episode budget as the pretrained agent's post-intervention period. Isolates "this agent's prior history matters" from "this is simply how fast any agent adapts to this environment."
+- **Floor control**: `cue_validity=0` repeated through the same decorrelate/naive comparison. Rules out the comparison methodology itself manufacturing a spurious gap when there is no real cue information to begin with.
+- **Placebo control**: a permutation of the real, already-realized acquisition-phase cue sequence in place of `decorrelate()`'s fresh resampling (Section 9.4). Rules out an artifact of the decorrelation mechanism specifically, as opposed to the mere absence of cue information.
+
+### 5.4 Statistical conventions
+
+Independent two-sample t-tests (`scipy.stats.ttest_ind`) with Cohen's d reported alongside every p-value; 15–30 seeds per cell; a stated Holm-Bonferroni correction applied within each experiment's own pre-registered comparison family (Section 8); nonparametric bootstrap confidence intervals (`analysis/stats.py::bootstrap_diff_ci`) as a normality-free cross-check where reported.
+
+## 6. Metric Definitions
+
+| Metric | Definition | Range | Known confounds / limitations |
+|---|---|---|---|
+| **`proxy_dependence`** | `P(causal action \| cue=1) − P(causal action \| cue=0)`, softmax-read at the decision state. | `[−1, 1]` | Primary metric throughout. Raw gaps between pretrained and naive-control agents must be normalized by distance to the fully-adapted target when that target differs between conditions (discovered empirically, Section 10.3), or adaptation *speed* is conflated with adaptation *distance*. |
+| **`cue_dependence_score` (CDS)** | Softmax mass on the non-causal (cue-associated + neutral) actions at the decision state. | `[0, (k−1)/k]` for `k` available actions | **Proven structural limitation**: under tabular TD learning, a never-rewarded action cannot acquire stable value, so CDS cannot exceed the softmax tie-breaking floor regardless of true dependence. This is not a hypothesis — Section 10.1 verifies a pre-existing script's apparent positive result is this floor exactly, to three decimal places. Must always be compared against a `cue_validity=0` floor control at the same action count. |
+| **`persistence_index`** | Post-intervention CDS relative to pre-intervention CDS. | `[0, ∞)`, undefined (returned as `None`, not 0) when the pre-intervention baseline is negligible | Descriptive; not used as a primary decision criterion in this report. |
+| **`policy_entropy`** | Shannon entropy (nats) of the softmax policy at the decision state. | `[0, ln k]` | Introduced in this report specifically to diagnose PPO's entropy-collapse dynamic (Section 7.9); distinguishes a genuinely cue-insensitive, still-exploring policy from one that has simply collapsed to a single action everywhere, which CDS and `proxy_dependence` alone cannot do. |
+
+Two metrics considered and explicitly not added, to avoid redundancy: cumulative regret (this repository's reward structure makes regret a near-linear transform of goal rate, already reported per experiment, so it would not carry independent information) and a dedicated generalization-performance / held-out-environment metric (the cross-environment replication in Section 7.7 already serves this purpose directly, at the level of whether the *qualitative pattern* replicates, which a single scalar metric would not improve on).
+
+## 7. Experimental Results
+
+Each subsection corresponds to one pre-registered experiment. All numbers are quoted from the committed `reports/*.md` files named.
+
+### 7.1 Minimum viable experiment: tabular agents (`cue_validity_mve_report.md`)
+
+Tabular SARSA(λ), decorrelate intervention, `cue_validity ∈ {0, 0.5, 0.95}`, 30 seeds. **Null, with a direct mechanistic explanation, not merely absence of evidence**: acquisition-end CDS (mean 0.752) is statistically indistinguishable from the exact softmax tie-breaking value (0.75) at every validity level including 0.95 — no validity-dependent preference ever forms during acquisition. The cause is structural: with the cue observed at a different phase from the decision, every action at the cue-exposed state leads to an identical next state and identical immediate reward, so no reward-relevant channel exists through which cue validity could ever bias tabular Q-values. This is a repository-wide, representation-general finding, not specific to this one script (Section 10.1).
+
+### 7.2 Proxy-dependence and representation (`cue_validity_proxy_dependence_report.md`)
+
+Following the Section 7.1 diagnosis, the cue-decision phase separation was removed (cue observed exactly at the decision phase). `tabular`, `linear_raw`, `linear_orthogonal`; decorrelate intervention; `v ∈ {0, 0.5, 0.95}`; 15 seeds. **This is the core positive result of this research program.** `tabular` remains null (p=0.899 both levels, d≈−0.05). `linear_raw`: decorrelate 0.062/0.110 vs. naive 0.009/0.009, p<0.0001 both levels, **Cohen's d = 12.18 / 23.59**. `linear_orthogonal`: decorrelate 0.050/0.098 vs. naive 0.007/0.007, p<0.0001 both, d = 8.04 / 17.83. Both linear conditions' decorrelate arms remain censored at the full 30-block observation window (extinction half-life never reached). Replay-buffer staleness is ruled out directly: acquisition alone generates ~15,000 environment steps and the post-intervention window ~7,500, both exceeding the 8,000-transition replay buffer, so by the final measurement the buffer has cycled roughly 2.5× its own capacity in purely post-decorrelation data — the persistence is parametric, not a data-pipeline artifact.
+
+### 7.3 Mechanism: reversal vs. decorrelation (`cue_validity_reversal_report.md`)
+
+Same agents/environment, `reverse()` in place of `decorrelate()`. The pre-registered primary criterion (raw gap between reversed and naive-reversed final values) found **no support** — reversal's absolute residual gap was *larger* than decorrelation's, the opposite of the hypothesis. Diagnosis: reversal's fully-adapted target is a full sign flip from the acquisition value, a strictly larger distance than decorrelation's near-zero target in the same episode budget, so the raw gap conflates distance with speed. A post-hoc, explicitly exploratory normalized metric (fraction of the required change achieved) was introduced and reverses the conclusion: `linear_raw` reversal-fraction-adapted exceeds decorrelation-fraction-adapted at both validity levels (v=0.5: 0.509 vs. 0.349, p<0.0001, d=2.40; v=0.95: 0.504 vs. 0.341, p<0.0001, d=3.01); `linear_orthogonal` likewise (v=0.5: d=1.60, p=0.0002; v=0.95: d=2.44, p<0.0001). `tabular` shows no difference at either level (both arms near-fully adapted already, as expected — not a test of the mechanism). All four linear cells survive Holm-Bonferroni correction within this experiment's own family (adjusted p = 0.0179, 0.0073, 0.0060, 0.0003).
+
+### 7.4 Boundary conditions: nonlinearity and coordinate access (`cue_validity_nonlinear_report.md`)
+
+Adds `linear_interaction_only` (interaction-only feature encoding, no raw cue coordinate), `neural_raw`, `neural_interaction_only`; decorrelate only. `linear_interaction_only` and `neural_raw` both retain a significant effect, smaller than `linear_raw`'s; `neural_interaction_only` is statistically indistinguishable from the naive-control floor (p=0.978/0.063). After Holm-Bonferroni correction across this experiment's own 6-cell family (Section 8): `linear_interaction_only` and `neural_raw` both survive at both validity levels (worst case p=0.0286); `neural_interaction_only` remains non-significant. **The effect is graded by both capacity and coordinate accessibility, vanishing only when both are reduced together** — a more precise finding than a binary "linear-representation artifact," and one unaffected by correction.
+
+### 7.5 Reversal extended to three more representations (`cue_validity_neural_reversal_report.md`, with correction)
+
+Tests `linear_interaction_only`, `neural_raw` (later seed-topped-up to 30 seeds), `neural_interaction_only` under reversal. The per-cell, uncorrected analysis initially reported `linear_interaction_only` as "supported" at both validity levels (p=0.024, 0.019). **Applying this report's own stated Holm-Bonferroni policy across this experiment's full 6-cell family overturns that conclusion: none of the six cells survive correction** (adjusted p = 0.095, 0.095, 0.086, 0.679, 0.815, 0.815). This does not affect Section 7.3's result (a separate pre-registered family that survives correction cleanly); it is reported here as a genuine, dated correction to this report's own earlier, less rigorously checked conclusion, not minimized.
+
+### 7.6 Optimizer ablation (`cue_validity_optimizer_ablation_report.md`)
+
+Tests whether `neural_raw`'s effect depends on Adam's momentum specifically, by repeating the core decorrelate-vs-naive comparison with plain SGD (momentum=0). `neural_raw` retains a significant effect under SGD at both levels (p=0.018/0.0003; survives correction within this experiment's own 4-cell family, adjusted p=0.036/0.0012). The effect does **not** depend on the training optimizer's momentum.
+
+### 7.7 Cross-environment replication (`cue_validity_cross_environment_report.md`)
+
+The core pattern, re-tested in `CueValidityGridEnv` (Section 4.1), a structurally different task requiring real navigation. All three pre-registered criteria are met: `linear_raw` shows a significant effect at both validity levels (p<0.0001 both, **Cohen's d = 6.12 / 5.44**); `tabular` shows none (p=0.25/0.21); the floor control shows no spurious effect for either condition (p=0.35/0.29). `neural_raw` initially showed no effect at this environment's nominal 1500-episode intervention budget; a step-count-matched retest (800 episodes, matching the *original* environment's total training-call count rather than its nominal episode count) recovered a significant effect (`cue_validity_grid_neural_stepmatched_report.md`), and a follow-up test isolated the explanation to training-step volume rather than the added demand of learning navigation (`docs/cue_validity_grid_capacity_sharing.md`: an `auto_navigate` control, holding step count exactly constant while removing the navigation-learning demand, still showed no effect, p=0.853/0.068). `neural_raw` reversal and `neural_interaction_only` coordinate-dependence were subsequently also confirmed in this environment (`cue_validity_grid_reversal_interaction_report.md` for `linear_raw`'s reversal, d=5.84/2.09; `cue_validity_grid_neural_reversal_interaction_report.md` for `neural_raw`'s reversal, surviving correction at both levels, d=1.11/1.03), completing the representation × intervention matrix in a second environment.
+
+### 7.8 Robustness ablations (`cue_validity_shuffle_placebo_report.md`, `cue_validity_replay_buffer_sweep_report.md`, `cue_validity_capacity_sweep_report.md`)
+
+- **Placebo control**: a permutation of the real acquisition cue sequence gives statistically indistinguishable gaps from ordinary `decorrelate()` (p=0.845/0.420) — the decorrelation mechanism itself is not an artifact source.
+- **Replay buffer size** ∈ {500, 2000, 8000, 20000}: the effect is significant at every size (p<0.0001, all 8 cells, survives correction), with effect size increasing monotonically with buffer size (d: 5.87→15.49 at v=0.5; 10.99→35.29 at v=0.95) — a genuine, reported observation, not treated as undermining the exclusion itself, since the effect is present even at the smallest buffer tested.
+- **Capacity sweep**, `neural_raw`, widths {8, 16, 32, 64, 128}: a clean, monotonic dose-response curve (d: 1.85→0.23 at v=0.5; 2.23→0.63 at v=0.95). After Holm-Bonferroni correction across this 10-cell family, the effect is reliably detectable through width 32, not width 64 as the uncorrected numbers alone suggest (width 64's v=0.95 cell, raw p=0.015, adjusts to 0.059).
+
+### 7.9 PPO: a qualitatively different algorithm class (`docs/cue_validity_ppo.md`)
+
+An initial test, matching DQN's episode budget, found a *significant difference in the wrong direction* (decorrelate smaller than naive, p<0.0001, d=−2.28/−1.84) — not tabular's genuine null. A diagnostic run (tracking `proxy_dependence` and the newly introduced `policy_entropy` metric block-by-block) found the cause: PPO's `proxy_dependence` follows an **inverted-U trajectory**, peaking around 550–1050 episodes (varying by seed) and then falling back toward zero as the policy converges, tracking entropy's own steady decline toward `0`. The mechanism is structural, not a tuning failure: the designated causal action weakly dominates regardless of the cue in this environment, so a fully converged policy assigns it the same near-certain probability under either cue condition, driving `proxy_dependence` to exactly zero — because, unlike DQN's Q-values (a regression target that keeps tracking cue-conditioned expected-return differences indefinitely, even once the *greedy* policy has converged), PPO's actor logits are shaped only by a policy-gradient objective with no force preserving such differences once the dominant action's advantage saturates.
+
+A retest at a fixed, diagnostic-informed 800-episode acquisition budget recovered a substantial acquisition-phase signal (0.07–0.09) but the same wrong-direction result persisted (p=0.044/0.084), traced to a second confound: the pretrained arm's 2,300 total episodes (800 acquisition + 1,500 intervention) against the naive arm's 1,500 meant the pretrained arm had simply progressed further along the *same* entropy-collapse curve, independent of decorrelation. A total-episode-matched retest (naive also trained for 2,300 total episodes) resolved this: `decorrelate` is now numerically larger than `naive` at both levels (0.016/0.018 vs. 0.014/0.014) — the hypothesized direction — but neither reaches significance (p=0.398/0.166, Cohen's d=0.32/0.54). **This is reported as underpowered, not negative.** A subsequent capacity sweep (widths 16, 64, reusing the validated width-32 result) found the effect size is **not monotonic in capacity** the way DQN's is: weakest at width 16 (d=0.10/0.21), peaks at the default width 32 (d=0.32/0.54), and reverses sign at width 64 (d=−0.29/−0.13) — plausibly a capacity-dependent entropy-collapse-speed effect, or noise at 15 seeds per cell; this report cannot distinguish the two.
+
+## 8. Statistical Analysis
+
+A single Holm-Bonferroni policy (`docs/multiple_comparison_correction.md`, `analysis/multiple_comparison_correction.py`) is applied within each experiment's own pre-registered comparison family — the rationale for this family boundary being that a reader asking "did this experiment find the effect" is implicitly asking about every cell in that experiment's own design at once, not about every p-value this project has ever produced as one undifferentiated family. One family (the shuffled/placebo control, Section 7.8) is explicitly excluded from this discovery-oriented correction because its pre-registered success criterion is *non-significance*; correcting it in the same direction would make it easier, not harder, to pass, the wrong direction for added rigor.
+
+| Experiment family | Cells (n) | Survive correction |
+|---|---:|---|
+| MVE | 2 | 0/2 (both already non-significant, expected) |
+| Proxy-dependence | 6 | 4/6 (`linear_raw`, `linear_orthogonal`; `tabular` null as expected) |
+| Reversal (pre-registered) | 6 | 4/6 (same two linear conditions) |
+| Nonlinear, coordinate-dependence test | 4 | 3/4 |
+| Nonlinear, own effect (H4 basis) | 6 | 4/6 (`linear_interaction_only`, `neural_raw`) |
+| **Neural reversal extension** | 6 | **0/6 — a genuine correction to an earlier conclusion** |
+| Optimizer ablation | 4 | 3/4 |
+| Replay buffer sweep | 8 | 8/8 |
+| Capacity sweep | 10 | 6/10 (widths 8, 16, 32) |
+
+The core result (Sections 7.2, 7.3, 7.6, 7.7, 7.8) is unaffected by correction, most cells surviving at p<0.0001 even after adjustment. The one place correction reversed an earlier-reported conclusion (Section 7.5) is reported as such in both this report and the originating document, not silently folded in.
+
+## 9. Ablation Studies
+
+Beyond the optimizer, capacity, and replay-buffer ablations already described (Sections 7.6, 7.8), this project implemented and verified the following negative controls, each ruling out a specific alternative explanation:
+
+| Control | Rules out |
+|---|---|
+| Naive control (every experiment) | "Any agent adapts this slowly" vs. "this agent's specific history matters" |
+| Floor control (`v=0`) | The comparison methodology itself manufacturing a spurious gap |
+| Orthogonal rotation of raw features | A single named coordinate being the artifact |
+| Interaction-only encoding × nonlinearity (2×2) | Capacity-only or accessibility-only explanations in isolation |
+| Replay-buffer-capacity calculation | Data-pipeline staleness vs. genuine parametric persistence |
+| Shuffled/placebo cue sequence | `decorrelate()`'s own resampling mechanism as an artifact source |
+| `auto_navigate` grid-environment control | Navigation-learning demand vs. raw training-step volume as competing explanations for a budget-dependent null |
+
+## 10. Failure Analysis
+
+This project's own methodological failures and their resolutions are reported in full, as a record of what a rigorous iterative correction process looks like rather than a polished retrospective account.
+
+### 10.1 Mischaracterized pre-existing results
+
+This repository contained, prior to this research program, three families of earlier experiments. An initial audit characterized one of them (~14 self-contained scripts, "Family C") as "functional, properly designed, consistently null for persistence." **This characterization was wrong.** Re-examining each script's own already-generated reports found: four scripts had already found the same core effect (large, representation-dependent persistent dependence under linear agents), with magnitudes comparable to this report's own, but interpreted their own positive result as a "representation artifact" and set it aside rather than reporting it as a scoped finding. One script's own binary pass/fail criterion (`neural_recurrent_reversal_experiment.py`) excludes its own `linear` condition's large result (−0.718) from the comparison entirely, reporting "not supported" beside an unexamined number that would have supported it. One apparently-positive result (`distractor_action_experiment.py`'s "Credit Diffusion Hypothesis") is a measurement artifact: its reported CDS values match the softmax tie-breaking floor `N/(N+1)` to three decimal places at every tested point, verified directly against that script's own action-count formula, with reward and goal rate never moving. Of the remaining genuine nulls, two (`hidden_state_superstition_experiment.py`, `ambiguous_causality_experiment.py`) are fully explained by tabular representation (one with an additional cue-decision phase-separation flaw, the same bug found and fixed in Section 7.1); the last two (`spurious_correlation_experiment.py`, `temporal_distractor_experiment.py`) give reward fully deterministically, with no hidden stochastic variable for their cue to be informative about at all — confirmed directly against already-committed `Q_causal` data (0.489 vs. 0.484 across no-correlation and strong-correlation conditions, indistinguishable), a more fundamental explanation than the originally offered "ceiling performance" hypothesis, which turned out not to be the actual mechanism.
+
+### 10.2 An inherited ref-cache artifact
+
+A recurring automated tool warning reported unpushed commits on branches that `git ls-remote` and `git log` repeatedly confirmed were already fully pushed. This was verified as a local ref-cache artifact, not a real issue, each time it recurred, rather than acted on blindly.
+
+### 10.3 The raw-gap vs. normalized-gap metric error
+
+Documented in full in Section 7.3: a pre-registered primary criterion gave a result opposite to the actual underlying effect because it did not account for reversal and decorrelation having different-distance fully-adapted targets. The general lesson (normalize any "gap to naive control" metric by the required distance whenever that target differs between compared conditions) was then applied prospectively in every subsequent reversal-style experiment, rather than only noted in hindsight.
+
+### 10.4 PPO's three-stage confound
+
+Documented in full in Section 7.9. Three successive, independently diagnosed confounds (an episode budget mismatched to PPO's own convergence dynamics; a description of the resulting problem as "undertraining," which direct diagnosis then showed was backwards; and an unequal total-training-length confound in the naive-control design) were each identified, checked against new data, and corrected in sequence, arriving at a final, mechanistically grounded account rather than stopping at the first available, more convenient explanation.
+
+## 11. Limitations
+
+- **No live literature search.** Section 3's related work is drawn from general domain knowledge, not verified against primary sources during this project. Citations are approximate (author, approximate year) and should be checked before any external use of this report.
+- **Two environment structures.** Both share the same underlying causal mechanism (a hidden state, a cue correlated with it, one causal and one cue-associated action); a third, more structurally distinct environment has not been tested.
+- **PPO's persistence question remains statistically unresolved.** Section 7.9's final, methodologically corrected comparison is directionally consistent with the hypothesis but underpowered at 15 seeds (Cohen's d 0.3–0.5); a seed top-up (the standard escalation used elsewhere in this project when an effect size is small but directionally consistent) has not been run.
+- **One architecture per class is swept, not jointly.** Capacity and replay-buffer size were each swept independently for `neural_raw`/`linear_raw`; a joint sweep, and equivalent sweeps for other conditions, have not been run.
+- **`neural_interaction_only`'s own effect in the grid environment is unexplained.** It shows a significant but wrong-signed decorrelate-vs-naive difference at one validity level (Section 7.7); this does not affect the coordinate-dependence conclusion it was tested alongside, but is not itself diagnosed.
+- **Two Family C nulls (`spurious_correlation_experiment.py`, `temporal_distractor_experiment.py`) are explained at the design level, not reproduced with a corrected design.** No experiment was run adding a genuine hidden stochastic variable to those specific environments to directly confirm the diagnosis produces a positive result; `CueValidityEnv` already serves as that corrected design in a different environment, and was judged sufficient without rebuilding the originals.
+- **Hyperparameters for PPO and the neural agents were not tuned for this specific task family**, beyond the acquisition-budget and total-episode-matching corrections documented in Section 7.9; they were adopted from this repository's existing conventions or standard defaults.
+
+## 12. Discussion
+
+The central, defensible claim of this report is narrower than the original, unscoped research question: non-causal stabilization, as operationalized by `proxy_dependence`, is a real, replicated, mechanistically-explained phenomenon specific to function-approximation agents, graded by representational capacity and cue-coordinate accessibility, and governed by a gradient-asymmetry mechanism that makes an active correction to a cue faster to adapt to, proportionally, than its passive invalidation. It is not a general property of reinforcement-learning agents as a class — tabular agents cannot show it, for a reason that is a property of tabular temporal-difference learning itself, not of this project's specific environments. Algorithm class matters in a way deeper than effect size: PPO's actor-logit-based readout of the same underlying quantity behaves categorically differently from a Q-value-based readout, because the two families of methods have different objectives governing what information a converged model retains about an invalidated correlation.
+
+Read against the animal-learning literature referenced in Section 3, the gradient-asymmetry finding (Section 7.3) is a closer match to an error-correction account of extinction than to Skinner's original superstition framing, which this project's title nonetheless inherits for historical and motivational reasons. We do not claim this project's small GridWorld agents instantiate the same cognitive or neural mechanisms studied in that literature; the parallel is offered at the level of functional dynamics (active correction produces a larger, more consistent update signal than passive invalidation), which is a substantially weaker and more defensible claim.
+
+For the broader evaluation-engineering goal stated in Section 2: the principles exercised here — committing success criteria before seeing data, using naive and floor controls to separate a real effect from an artifact of the measurement methodology, replicating a finding in a structurally different environment before treating it as general, stating and applying a multiple-comparison policy rather than reporting whichever comparisons happen to reach significance, and reporting every correction to this project's own earlier conclusions rather than only the final, polished account — are the same discipline a behavioural-robustness or distribution-shift evaluation of a substantially larger or more complex adaptive system would require. This report does not claim that doing so here establishes anything about those larger systems directly; it claims only that this is what doing so looks like, carried through to completion on a problem small enough to fully verify by hand.
+
+## 13. Future Research
+
+The following are proposed, not completed, work:
+
+1. A seed top-up for PPO's persistence test and capacity sweep (Section 7.9), to resolve whether the small, direction-consistent effect found there is real.
+2. A third, more structurally distinct environment (e.g., continuous control, or a task with a genuinely different reward topology) to further test the cross-environment replication's generality.
+3. A joint capacity × representation × intervention sweep, rather than the current set of largely independent one-axis sweeps.
+4. Direct reconstruction of `spurious_correlation_experiment.py`/`temporal_distractor_experiment.py` with an added hidden stochastic reward variable, to empirically confirm (rather than argue from design alone) that this is the missing ingredient.
+5. A systematic PPO hyperparameter sweep (learning rate, clip range, GAE λ, entropy coefficient) beyond the single default configuration and the one capacity axis tested here.
+6. External, out-of-repository timestamping of pre-registrations (e.g., via a public registry), as a stronger reproducibility guarantee than this project's current reliance on git commit history.
+
+## 14. Conclusion
+
+Non-causal stabilization in reinforcement learning is real, but it is not what a reader might assume from the term's superstition-learning origins: it is a representation-dependent, mechanistically explained, gradient-asymmetric phenomenon specific to agents whose learned values or policies are shaped by continuous, differentiable objectives, graded smoothly by capacity and by how directly a non-causal cue is encoded, and categorically different again for on-policy actor-critic methods than for value-based ones. Establishing this precisely, rather than confirming the broader and less defensible claim originally posed, required building the controls to falsify it at every step — and, on at least one occasion each for this project's own earlier conclusions and for a prior summary of this repository's history, doing exactly that.
