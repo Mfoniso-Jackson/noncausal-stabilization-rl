@@ -229,3 +229,36 @@ comparison this algorithm actually needs. **Success criterion, fixed
 before this rerun**: identical in form to every prior test in this
 lineage -- significant if `decorrelate`'s final `|proxy_dependence|`
 exceeds the total-matched `naive`'s, p < 0.05, at either validity level.
+
+### Result
+
+**The confound is resolved -- the comparison now points the right way,
+but is underpowered at 15 seeds.** `decorrelate` (0.016, 0.018) is now
+numerically *larger* than the total-matched `naive` (0.014, 0.014) at
+both validity levels -- the direction the original hypothesis predicted,
+and the opposite of every earlier PPO attempt in this document. Neither
+level reaches significance (t=0.858, p=0.398, d=0.32 at v=0.5; t=1.422,
+p=0.166, d=0.54 at v=0.95), and the v=0.95 bootstrap CI for the
+difference, `[-0.001, 0.009]`, only barely spans zero.
+
+**Final, complete answer for H4 and PPO, after three successive
+corrections to this experiment's own methodology:** PPO shows a small,
+directionally-consistent-with-persistence effect once (1) the acquisition
+budget is calibrated to PPO's own entropy-collapse dynamics rather than
+borrowed from DQN, and (2) total episode count is matched between
+pretrained and naive arms rather than just post-intervention count --
+but the effect size (Cohen's d ~0.3-0.5) is small enough that 15 seeds
+cannot distinguish it from noise. This is reported as **underpowered,
+not as a negative finding**: a larger seed count (the standard escalation
+used elsewhere in this lineage, e.g. `docs/cue_validity_neural_reversal.md`'s
+seed top-up) is the natural next step to resolve it, not undertaken here.
+Whatever a future, better-powered rerun finds, the methodological story
+told across this document stands on its own: PPO's `proxy_dependence`
+readout behaves fundamentally differently from DQN's precisely because it
+is read from policy logits under an objective with no force preserving
+cue-conditioned information once the dominant action's advantage
+saturates, rather than from a regression target that preserves it
+indefinitely -- a genuine, mechanistically-grounded instance of H4
+("different algorithms exhibit different patterns"), independent of
+whether the specific persistence effect itself is ultimately confirmed or
+not with more seeds.

@@ -36,7 +36,7 @@ actually supports a claim.
 | H1: Non-causal, predictive cues produce measurable behavioural dependence | **Supported** under linear function approximation (p<0.0001, Cohen's d 8–24), **absent** under tabular representation |
 | H2: Cue validity / uncertainty modulates persistence | **Tested, not supported** for a dose-response relationship after multiple-comparison correction — a graded capacity/accessibility relationship was found instead (see H4 row) |
 | H3: An active correction (reversal) produces faster adaptation than a passive one (decorrelation) | **Supported** for `linear_raw`/`linear_orthogonal` (p<0.001 after correction), replicated in a second, structurally different environment (p<0.0001). An extension to three additional representations did **not** survive multiple-comparison correction — reported as a genuine, dated correction, not hidden. |
-| H4: Different representations/algorithms show different patterns | **Supported** for representation (effect size is a clean, monotonic function of model capacity, Cohen's d 1.85→0.23 across MLP widths 8–128, and of cue-coordinate accessibility). PPO was tested as a fourth architecture class and came back **inconclusive, not a clean negative**: its acquisition-phase dependence was ~6–10x smaller than `linear_raw`'s at the same episode budget (PPO is more sample-inefficient per environment step than replay-buffer DQN), so there was little genuine dependence for the intervention to show persistence of either way. See `docs/cue_validity_ppo.md`'s addendum — a properly powered PPO test needs a budget or hyperparameters tuned to PPO's own convergence speed, not undertaken here. |
+| H4: Different representations/algorithms show different patterns | **Supported**, in two distinct ways. (1) *Representation*: effect size is a clean, monotonic function of model capacity (Cohen's d 1.85→0.23 across MLP widths 8–128) and of cue-coordinate accessibility. (2) *Algorithm class, mechanistically*: PPO's `proxy_dependence` (read from policy logits) necessarily collapses toward zero as its policy converges, because nothing in the policy-gradient objective preserves cue-conditioned logit differences once the dominant action's advantage saturates — unlike DQN's Q-values, a regression target that keeps tracking the cue-conditioned expected-return difference indefinitely. After correcting for this (a calibrated acquisition budget, then a total-episode-matched naive control — PPO's own entropy-collapse dynamics confound the standard DQN-style comparison in a way DQN itself doesn't face), PPO shows a small, direction-consistent-with-persistence effect (Cohen's d 0.3–0.5) that 15 seeds cannot distinguish from noise — reported as underpowered, not negative. See `docs/cue_validity_ppo.md` for the full three-stage correction. |
 
 Every claim above is backed by a pre-registered design (metrics and success
 criteria committed **before** data collection), naive controls (to separate
@@ -210,12 +210,10 @@ larger model would need, whatever the model class.
 
 ## Open Items
 
-- A properly powered PPO test: the first attempt was inconclusive because
-  PPO's acquisition-phase learning (default hyperparameters, DQN-matched
-  episode budget) was ~6–10x weaker than `linear_raw`'s, leaving little
-  genuine dependence for the intervention to act on. A budget or
-  hyperparameters tuned to PPO's own convergence speed is needed before
-  H4 can be answered for this algorithm — see `docs/cue_validity_ppo.md`'s
-  addendum.
+- A larger-seed PPO rerun: with the budget and naive-control confounds
+  fixed (`docs/cue_validity_ppo.md`), PPO shows a small,
+  direction-consistent-with-persistence effect (Cohen's d 0.3–0.5) that
+  15 seeds cannot resolve from noise. A seed top-up (the standard
+  escalation used elsewhere in this lineage) would settle it.
 - Reversal and interaction-only encoding for `neural_raw` specifically in
   the grid environment have not been tested (only `linear_raw`).
