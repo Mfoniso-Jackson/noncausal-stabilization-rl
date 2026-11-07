@@ -52,3 +52,26 @@ reported descriptively, whatever the shape, not forced into that framing.
 
 Nothing above will change after results are inspected, following the
 same discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**No width shows a significant effect after correction, as anticipated
+given the width-32 result was already known to be underpowered rather
+than null.** More informative is the shape: effect size is **not
+monotonic in capacity**, unlike DQN's clean capacity curve
+(`docs/cue_validity_capacity_sweep.md`). Cohen's d is weakest at width 16
+(0.10 at v=0.5, 0.21 at v=0.95), peaks at the default width 32 (0.32,
+0.54), and **reverses sign** at width 64 (-0.29, -0.13). A reversed sign
+means `naive` was numerically larger than `decorrelate` at that width --
+the same wrong-direction pattern seen in this document's earlier,
+confound-ridden attempts, now reappearing at a specific capacity rather
+than universally. With only 15 seeds per cell and effect sizes this
+small, this could be genuine non-monotonicity (e.g. a wider network
+converges faster, reaching further along its own entropy-collapse
+trajectory within the same 2300-episode budget, mechanically producing a
+smaller or reversed gap -- directly analogous to the `auto_navigate`
+capacity-sharing-vs-step-count distinction worked out for the grid
+environment) or could be noise at this seed count; this document does not
+have enough seeds to tell the two apart and does not claim to. Reported
+descriptively, as pre-registered, not forced into a capacity-curve
+narrative the data does not clearly support.
