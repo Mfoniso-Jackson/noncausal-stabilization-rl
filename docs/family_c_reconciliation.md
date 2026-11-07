@@ -144,6 +144,49 @@ re-running -- the explanation was fully available from the existing code,
 and is now the complete, confirmed account for why these two scripts
 found genuine nulls.
 
+## Addendum: the remaining two nulls are also now diagnosed, and it is not ceiling performance
+
+The "ceiling performance removes behavioral pressure" hypothesis offered
+above for `spurious_correlation_experiment.py` and
+`temporal_distractor_experiment.py` is **not what is going on**, and a
+more fundamental, code-verified explanation is available without running
+anything new. Both environments' `step()` methods give reward
+**deterministically**: `SpuriousCorrelationEnv.step()` gives `+1.0`
+whenever `action == ACTION_CAUSAL` at `TARGET_PHASE`, unconditionally;
+`TemporalDistractorEnv.step()` gives `+1.0` whenever `action == 0` at
+`TARGET_PHASE`, unconditionally. Neither environment has anything
+resembling `CueValidityEnv`'s `hidden_state` -- an unobserved, per-episode
+random variable whose value the cue is genuinely informative about. The
+"cue" in both of these environments (whether a spurious/distractor action
+happens to be available this phase) is correlated with nothing about
+reward likelihood, because reward likelihood is not a variable at all
+here -- it is 1.0 given the causal action, always.
+
+Without a hidden variable for the cue to carry rational, Bayesian
+information about, there is no basis for a cue-conditioned **value**
+difference to exist in `Q(causal action)` in the first place, for any
+agent class, tabular or not -- this is a stronger and more basic claim
+than "tabular agents can't retain it." Checked directly against the
+already-committed `results/spurious_correlation_results.csv` (no new run):
+mean `Q_causal` is 0.489 in the no-correlation condition and 0.484 in the
+strong-correlation condition -- indistinguishable, exactly as this
+account predicts, not merely "no significant *behavioral* trend" as the
+original report checked. The observed `goal_rate=1.000` ceiling is a
+symptom of the same design fact (a deterministic reward is trivially
+solvable to `goal_rate=1.0` once the causal action is learned at all), not
+an independent causal factor removing "pressure" from an otherwise-present
+dependency.
+
+**All four of Family C's genuine nulls are now fully accounted for, with
+no new experiments required for any of them**: two by tabular
+representation (plus, in one case, a cue-decision phase-separation flaw),
+two by the environment never having a hidden stochastic reward-determining
+variable for the cue to be informative about. `CueValidityEnv` is, in
+effect, the version of this task family that actually has the ingredient
+(a hidden state) these four scripts' designs omit -- which is also why
+this lineage's own result required building a new environment rather than
+finding the effect in an existing one.
+
 ## Revised answer to "why did Family C find null results while this line found positive ones?"
 
 The honest answer is: **it mostly didn't.** Four of the ~14 scripts
@@ -164,8 +207,12 @@ tabular conditions hit, and the latter has a second, independently
 sufficient flaw (its cue is observed one phase before the decision it
 would need to bias). The other two
 (`spurious_correlation_experiment.py`, `temporal_distractor_experiment.py`)
-remain explained only by a plausible, not confirmed, hypothesis (ceiling
-performance removing any behavioral pressure to reveal a dependency).
+are also now fully diagnosed (see the addendum above): their reward is
+fully deterministic given the causal action, with no hidden stochastic
+variable for their "cue" to carry any rational information about -- a
+more fundamental reason than tabular representation or ceiling
+performance, confirmed directly against already-committed Q-value data,
+not merely hypothesized.
 
 This session's contribution is therefore not "discovering an effect that
 Family C uniformly missed," but **doing rigorously, with pre-registration,
