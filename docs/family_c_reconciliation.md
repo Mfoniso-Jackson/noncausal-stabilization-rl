@@ -101,11 +101,48 @@ action-selection-level dependence under a ceiling-performance condition),
 so it is reported here as a hypothesis, not a confirmed mechanism.
 `hidden_state_superstition_experiment.py` and
 `ambiguous_causality_experiment.py` report non-ceiling goal rates
-(0.405-0.927) with small, non-significant trend metrics; this reconciliation
-did not re-derive why in further mechanistic detail -- doing so would
-require re-running them with the naive-control and pre-registration
-methodology this lineage now uses, which is noted as a possible future
-item but was not undertaken here.
+(0.405-0.927) with small, non-significant trend metrics.
+
+## Addendum: these two nulls are now diagnosed, with no new experiments needed
+
+Reading both scripts' agent classes directly (not re-running them)
+resolves this: **both use `SarsaLambdaAgent`, a purely tabular agent**
+(`self.q = [[0.0]*4 for _ in range(state_count)]`) -- no function
+approximation anywhere, including `hidden_state_superstition_experiment.py`'s
+"memory_agent" variant, which only expands the discrete state space
+(`prev_obs * obs_count + obs`) rather than introducing any shared
+parameters. This is the same structural limit
+`docs/tabular_rl_cannot_be_superstitious.md` already establishes for this
+whole lineage's own tabular conditions: with no parameter sharing across
+states, there is no mechanism for information to leak between them, so a
+rarely-rewarded action cannot acquire a stable value under tabular TD
+learning regardless of how strongly correlated its context is with
+reward. These two scripts are two more instances of that already-diagnosed
+phenomenon, not a separate, unexplained null.
+
+`ambiguous_causality_experiment.py` has a second, compounding structural
+flaw on top of being tabular: its cue is visible only at `PROBE_PHASE =
+TARGET_PHASE - 1` -- one phase *before* the reward-determining decision,
+not at it (`observe()`'s `cue_bit` is set only `if self.phase ==
+PROBE_PHASE`, while the actual causal/spurious/neutral choice that
+determines reward happens one phase later, at `TARGET_PHASE`). This is
+the exact "cue separated from the decision" structural bug
+`cue_validity_mve_experiment.py`'s own report independently diagnosed and
+corrected in this lineage (`docs/tabular_rl_cannot_be_superstitious.md`):
+choosing any action at the cue-exposed state leads to the identical next
+state and identical immediate reward regardless of which action is
+chosen, so no reward-relevant channel exists through which the cue could
+ever bias those action-values, at any amount of training -- independent
+of, and in addition to, the tabular-representation limit above.
+`hidden_state_superstition_experiment.py` does not have this second flaw
+(its proxy cue is visible at every phase, including implicitly at
+`TARGET_PHASE` itself via `proxy_by_phase[self.phase]`), so for it the
+tabular-representation limit alone is the full explanation.
+
+This required no new experiments, no naive controls, and no
+re-running -- the explanation was fully available from the existing code,
+and is now the complete, confirmed account for why these two scripts
+found genuine nulls.
 
 ## Revised answer to "why did Family C find null results while this line found positive ones?"
 
@@ -118,11 +155,17 @@ own binary verdict obscures a result in its own table that is directionally
 consistent with the cue-validity lineage's graded finding. One
 apparently-positive result is a measurement artifact unrelated to the
 phenomenon (the CDS tie-breaking floor, scaling mechanically with action
-count). Only a minority of the family -- two or three scripts, on this
-reading -- found results that look like genuine nulls, and the mechanism
-there (ceiling performance removing any behavioral pressure to reveal a
-dependency, in at least two of them) is a plausible but not confirmed
-explanation.
+count). Only a minority of the family -- four scripts, on this reading --
+found results that look like genuine nulls. Two of them
+(`hidden_state_superstition_experiment.py`, `ambiguous_causality_experiment.py`)
+are now fully diagnosed, with no new experiments needed: both use a
+purely tabular agent, the same structural limit this lineage's own
+tabular conditions hit, and the latter has a second, independently
+sufficient flaw (its cue is observed one phase before the decision it
+would need to bias). The other two
+(`spurious_correlation_experiment.py`, `temporal_distractor_experiment.py`)
+remain explained only by a plausible, not confirmed, hypothesis (ceiling
+performance removing any behavioral pressure to reveal a dependency).
 
 This session's contribution is therefore not "discovering an effect that
 Family C uniformly missed," but **doing rigorously, with pre-registration,
