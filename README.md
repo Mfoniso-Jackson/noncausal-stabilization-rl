@@ -168,9 +168,11 @@ preserved for reference, not relied on:
   linear/orthogonal/nonlinear proxy-feature chain) — contrary to an earlier
   summary of this repository, **most of these are not clean nulls**; see
   `docs/family_c_reconciliation.md` for the full correction, including an
-  exact mechanistic diagnosis (both tabular representation and, in one
-  script, a "cue separated from the decision" design flaw) for the two
-  that are.
+  exact mechanistic diagnosis for all four genuine nulls: two from
+  tabular representation (one with an added "cue separated from the
+  decision" design flaw), two from a more basic fact — their reward is
+  fully deterministic, with no hidden stochastic variable for their
+  "cue" to carry any rational information about.
 
 ## Running Experiments and Tests
 
@@ -215,8 +217,5 @@ larger model would need, whatever the model class.
   hyperparameters tuned to PPO's own convergence speed is needed before
   H4 can be answered for this algorithm — see `docs/cue_validity_ppo.md`'s
   addendum.
-- Two genuinely-unexplained Family C nulls
-  (`spurious_correlation_experiment.py`, `temporal_distractor_experiment.py`)
-  — a ceiling-performance hypothesis is offered but not confirmed.
 - Reversal and interaction-only encoding for `neural_raw` specifically in
   the grid environment have not been tested (only `linear_raw`).
