@@ -190,3 +190,42 @@ count, for the same entropy-collapse-driven reasons as the pretrained
 arm -- in which case the comparison is confounded by both arms moving
 through their own version of the same inverted-U curve, and this will be
 reported and diagnosed, not minimized.
+
+### Result
+
+**The anticipated confound is exactly what happened.** Acquisition-phase
+`proxy_dependence` at episode 800 is now substantial (0.071 at v=0.5,
+0.092 at v=0.95 -- within the diagnostic's expected range, no longer tiny
+as in the first attempt). But `decorrelate` is still *smaller* than
+`naive` (0.016 vs. 0.024 at v=0.5, p=0.044; 0.018 vs. 0.024 at v=0.95,
+p=0.084), the same direction as before. A tell-tale internal-consistency
+signature confirms the mechanism: `naive`'s final `proxy_dependence` and
+`policy_entropy` are **identical to four decimal places across both
+validity levels** (0.0234, 0.1588) -- exactly what the entropy-collapse
+account predicts, since `decorrelate()` is applied before `naive` ever
+trains, so its trajectory depends only on total episode count (1500),
+never on the nominal validity parameter. The `decorrelate` arm, having had
+2300 total episodes (800 acquisition + 1500 intervention) against
+`naive`'s 1500, has simply progressed further along the *same* entropy-collapse
+curve by the time both are probed -- mechanically producing a smaller
+value, with nothing to do with decorrelation's effect specifically.
+
+**This means the standard naive-control methodology itself -- matching
+post-intervention episode count, not total episode count, which is
+exactly right for `DQN`/`linear_raw`/`neural_raw` because their
+`proxy_dependence` is training-length-independent once converged -- is
+invalid for PPO without modification**, because PPO's readout is
+training-length-dependent via entropy collapse regardless of any
+intervention. A genuinely fair test needs to match **total** episode
+count between arms, not just post-intervention count.
+
+## Total-episode-matched retest: the methodologically correct comparison
+
+**Design**: reuses the already-collected `decorrelate` arm data above
+unchanged (2300 total episodes: 800 acquisition + 1500 intervention). Only
+`naive` is rerun, now trained for the **same 2300 total episodes**,
+entirely in the decorrelated environment (instead of 1500) -- the fair
+comparison this algorithm actually needs. **Success criterion, fixed
+before this rerun**: identical in form to every prior test in this
+lineage -- significant if `decorrelate`'s final `|proxy_dependence|`
+exceeds the total-matched `naive`'s, p < 0.05, at either validity level.
