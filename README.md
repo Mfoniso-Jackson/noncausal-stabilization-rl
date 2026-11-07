@@ -212,9 +212,14 @@ larger model would need, whatever the model class.
 
 - A larger-seed PPO rerun: with the budget and naive-control confounds
   fixed (`docs/cue_validity_ppo.md`), PPO shows a small,
-  direction-consistent-with-persistence effect (Cohen's d 0.3–0.5) that
-  15 seeds cannot resolve from noise. A seed top-up (the standard
-  escalation used elsewhere in this lineage) would settle it.
+  direction-consistent-with-persistence effect (Cohen's d 0.3–0.5 at the
+  default width) that 15 seeds cannot resolve from noise. A capacity
+  sweep (`docs/cue_validity_ppo_capacity_sweep.md`) found this is not a
+  monotonic capacity curve like DQN's — effect size peaks at the default
+  width and reverses sign at a wider network, plausibly a
+  capacity-dependent entropy-collapse-speed effect, but 15 seeds per
+  width cannot distinguish that from noise. A seed top-up (the standard
+  escalation used elsewhere in this lineage) would settle both.
 - `neural_interaction_only`'s own decorrelate-vs-naive effect in the grid
   environment shows an unexplained reversed direction at v=0.5 (naive >
   decorrelate, significant but wrong-signed) — the coordinate-dependence
