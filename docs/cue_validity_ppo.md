@@ -115,3 +115,78 @@ before declaring the intervention phase begun) or a hyperparameter
 sweep, neither of which was done here. This is reported as the honest
 outcome of the pre-registered test, not reframed as either a positive or
 a negative finding for H4.
+
+## Correction (same day, before any further data collection): "longer budget" was the wrong fix, and here is why
+
+A diagnostic run (not a new pre-registered experiment -- tracking
+`proxy_dependence` and the new `policy_entropy` metric block-by-block
+during acquisition only, no intervention) shows the paragraph above's
+proposed fix was backwards: **training PPO longer does not recover the
+effect, it destroys it further.** `proxy_dependence` does not monotonically
+grow toward `linear_raw`'s ~0.19-0.21 with more episodes; it rises from
+~0 to a peak of roughly 0.07-0.16 (varying by seed, peaking somewhere in
+the 550-1050 episode range across validity 0.5 and 0.95, seeds 0-2 all
+checked directly) and then **falls back toward 0** as training continues,
+tracking `policy_entropy`'s own steady, continued decline toward full
+convergence (by episode 1500, entropy is already down to 0.15-0.46 nats
+from a maximum of `ln(4)=1.386`, and still falling).
+
+The mechanism is now understood, not just observed: `ACTION_CAUSAL`
+weakly dominates in this environment regardless of the cue (it costs
+nothing extra and sometimes helps; no other action ever helps -- the same
+structural fact noted throughout this lineage). A fully converged policy
+should therefore assign `ACTION_CAUSAL` the same, near-certain probability
+regardless of cue, which drives `proxy_dependence` (the difference in that
+probability between cue=1 and cue=0) toward exactly 0 at convergence --
+this is not PPO failing to learn, it is PPO succeeding at learning the
+cue-independent optimal policy, which is itself a form of *not* being
+cue-dependent. This is structurally different from `DQN`/`linear_raw`: 
+`proxy_dependence` there is read from **Q-values**, a genuine regression
+target that keeps tracking the cue-conditioned expected-return difference
+even after the *greedy* policy has converged to the same action in both
+cue conditions -- nothing in TD regression erases that difference once
+learned. `PPO`'s actor logits are not a regression target; the policy-gradient
+objective has no force keeping cue-conditioned logit differences once the
+advantage of deviating from the dominant action is ~0 in both cue
+conditions, so those differences are free to wash out as entropy
+collapses. **This is a genuine, mechanistically grounded difference
+between value-based and policy-gradient methods for this metric, not an
+artifact of under-training.**
+
+This also means a clean "does persistence survive decorrelation"
+test cannot be built around a *converged* PPO baseline the way it was for
+`linear_raw`/`neural_raw` -- there is no stable, asymptotic
+pre-intervention `proxy_dependence` for PPO in this environment to test
+persistence *of*. The properly-powered test below uses a **fixed**
+acquisition budget chosen from this diagnostic *before* running the real
+experiment (not tuned per-seed to each seed's own peak, which would be a
+form of cherry-picking) and is explicit that this is an intermediate,
+pre-convergence snapshot, not a stable equilibrium -- interpreted
+accordingly, not claimed to carry the same evidentiary weight as the
+`linear_raw`/`neural_raw` results.
+
+## Properly-powered retest: pre-registered before running
+
+**Design**: `ppo` only, same two validity levels {0.5, 0.95}, same 15
+seeds, same `decorrelate`/`naive` methodology. **Acquisition budget fixed
+at 800 episodes** (16 blocks of 50) -- chosen from the diagnostic above
+(peaks observed at 550-1050 episodes across 4 seed/validity
+combinations; 800 sits within that range and is fixed in advance of
+running the 15-seed experiment, not selected afterward). Post-intervention
+budget unchanged (1500 episodes, 30 blocks of 50). All other
+hyperparameters unchanged (defaults).
+
+**Success / failure criteria (fixed before data collection)**: identical
+in form to the original experiment -- `ppo` matches the
+`linear_raw`/`neural_raw` pattern if the decorrelate-vs-naive gap is
+significant (p < 0.05, decorrelate magnitude greater than naive) at
+either validity level; matches `tabular`'s pattern if neither validity
+level is significant. **Explicitly anticipated as a plausible outcome,
+not a failure of the test**: because both arms are measured at a
+transient, not-yet-converged point in PPO's own training trajectory,
+the naive arm (which only ever trains in the decorrelated environment)
+may itself show a nonzero, *rising* `proxy_dependence` at this episode
+count, for the same entropy-collapse-driven reasons as the pretrained
+arm -- in which case the comparison is confounded by both arms moving
+through their own version of the same inverted-U curve, and this will be
+reported and diagnosed, not minimized.
