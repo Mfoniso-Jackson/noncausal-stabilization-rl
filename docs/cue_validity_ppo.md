@@ -72,3 +72,46 @@ whichever pattern it resembles, not forced into either camp.
 
 Nothing above will change after results are inspected, following the
 same discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**By the pre-registered criterion, PPO shows neither pattern cleanly, and
+the report's own "matches tabular" framing oversimplifies the result.**
+The decorrelate arm is not merely statistically indistinguishable from
+naive (tabular's actual signature, p=0.90, d≈0) -- it is *significantly
+smaller* than naive, in the opposite direction from the hypothesis
+(p<0.0001 both levels, Cohen's d -2.28 at v=0.5, -1.84 at v=0.95). That is
+a different, more specific result than a clean null, and the experiment's
+own generated report (`reports/cue_validity_ppo_report.md`) labelling it
+"PPO shows the tabular pattern: True" is misleading; this addendum
+corrects that framing without editing the report file itself.
+
+The most likely explanation, checked directly rather than assumed: PPO's
+**acquisition-phase** `proxy_dependence` is tiny (mean 0.017 at v=0.5,
+0.032 at v=0.95 -- roughly 6-10x smaller than `linear_raw`'s ~0.19-0.21 at
+the same validity levels and episode budget). PPO, with these default,
+untuned hyperparameters, essentially did not learn a strong
+cue-conditioned policy during acquisition in the first place -- almost
+certainly because on-policy PPO is more sample-inefficient per environment
+step than off-policy DQN with a replay buffer, and 3000 acquisition
+episodes (60 rollout-update cycles) was tuned for DQN's convergence speed,
+not PPO's. With so little genuine dependence to begin with, the
+significant decorrelate-vs-naive *difference* found is more consistent
+with an artifact of unequal total training (the pretrained-then-decorrelated
+agent gets 4500 total episodes against the naive agent's 1500, so it has
+simply had more opportunity to converge toward a low-variance policy by
+the time it is probed) than with evidence about persistence or its absence
+either way.
+
+**Net verdict: this experiment is inconclusive for H4, not a clean
+negative.** It does not provide evidence that PPO lacks the
+persistence phenomenon; it provides evidence that this specific,
+untuned, budget-matched-to-DQN configuration did not learn the task
+strongly enough during acquisition to test the question at all. A
+properly powered test would need either a longer acquisition budget tuned
+to PPO's own convergence speed (checked via acquisition-phase
+`proxy_dependence` reaching a comparable magnitude to `linear_raw`'s
+before declaring the intervention phase begun) or a hyperparameter
+sweep, neither of which was done here. This is reported as the honest
+outcome of the pre-registered test, not reframed as either a positive or
+a negative finding for H4.

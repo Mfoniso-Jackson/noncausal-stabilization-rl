@@ -36,7 +36,7 @@ actually supports a claim.
 | H1: Non-causal, predictive cues produce measurable behavioural dependence | **Supported** under linear function approximation (p<0.0001, Cohen's d 8–24), **absent** under tabular representation |
 | H2: Cue validity / uncertainty modulates persistence | **Tested, not supported** for a dose-response relationship after multiple-comparison correction — a graded capacity/accessibility relationship was found instead (see H4 row) |
 | H3: An active correction (reversal) produces faster adaptation than a passive one (decorrelation) | **Supported** for `linear_raw`/`linear_orthogonal` (p<0.001 after correction), replicated in a second, structurally different environment (p<0.0001). An extension to three additional representations did **not** survive multiple-comparison correction — reported as a genuine, dated correction, not hidden. |
-| H4: Different representations/algorithms show different patterns | **Supported.** Effect size is a clean, monotonic function of model capacity (Cohen's d 1.85→0.23 across MLP widths 8–128) and of cue-coordinate accessibility (interaction-only encoding shrinks or removes it). PPO was tested as a fourth architecture class — see `docs/cue_validity_ppo.md` for the pre-registered result. |
+| H4: Different representations/algorithms show different patterns | **Supported** for representation (effect size is a clean, monotonic function of model capacity, Cohen's d 1.85→0.23 across MLP widths 8–128, and of cue-coordinate accessibility). PPO was tested as a fourth architecture class and came back **inconclusive, not a clean negative**: its acquisition-phase dependence was ~6–10x smaller than `linear_raw`'s at the same episode budget (PPO is more sample-inefficient per environment step than replay-buffer DQN), so there was little genuine dependence for the intervention to show persistence of either way. See `docs/cue_validity_ppo.md`'s addendum — a properly powered PPO test needs a budget or hyperparameters tuned to PPO's own convergence speed, not undertaken here. |
 
 Every claim above is backed by a pre-registered design (metrics and success
 criteria committed **before** data collection), naive controls (to separate
@@ -208,8 +208,13 @@ larger model would need, whatever the model class.
 
 ## Open Items
 
-- A PPO hyperparameter sweep (only one, untuned configuration has been
-  tested so far — see `docs/cue_validity_ppo.md`'s limitations).
+- A properly powered PPO test: the first attempt was inconclusive because
+  PPO's acquisition-phase learning (default hyperparameters, DQN-matched
+  episode budget) was ~6–10x weaker than `linear_raw`'s, leaving little
+  genuine dependence for the intervention to act on. A budget or
+  hyperparameters tuned to PPO's own convergence speed is needed before
+  H4 can be answered for this algorithm — see `docs/cue_validity_ppo.md`'s
+  addendum.
 - Two genuinely-unexplained Family C nulls
   (`spurious_correlation_experiment.py`, `temporal_distractor_experiment.py`)
   — a ceiling-performance hypothesis is offered but not confirmed.
