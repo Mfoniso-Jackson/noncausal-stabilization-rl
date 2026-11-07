@@ -149,3 +149,118 @@ here. These remain natural follow-ups, now with a strong prior that they
 will reproduce, but not confirmed. This addendum does not change the
 criteria above; the verdict stands exactly as the pre-registered test
 computed it.
+
+## Extension: neural_raw in the grid environment (pre-registered before running)
+
+Written and committed before this extension's data is collected. Scope:
+add a **`neural_raw`** condition (the same `NeuralAgentWrapper`/`MLPQNet`
+2-hidden-layer architecture from
+`experiments/cue_validity_nonlinear_experiment.py`, over
+`CueValidityGridEnv.observation_vector()`'s 6 raw features) to this
+experiment, decorrelate intervention only, same `cue_validity` levels
+{0.0, 0.5, 0.95}, same 15 seeds, same episode budget (5000 acquisition,
+1500 post-intervention in 30 blocks of 50) as `tabular`/`linear_raw`
+above. `tabular` and `linear_raw` are not re-run; this extension's
+comparison reuses their already-committed results directly.
+Interaction-only encoding and reversal in this environment remain
+deferred past this extension too.
+
+**Success criterion (fixed before data collection)**: `neural_raw` shows a
+significant decorrelate-vs-naive gap (`compare_groups`, p < 0.05,
+decorrelate magnitude greater than naive) at at least one non-floor
+validity level, consistent with (not necessarily identical in magnitude
+to) `linear_raw`'s result above -- extending "the graded pattern
+replicates" to a second representation class in the new environment. The
+floor control must show no spurious effect for `neural_raw`, matching the
+criterion already applied to the other two conditions. A null result for
+`neural_raw` here is a valid, reportable outcome and would narrow the
+cross-environment claim to linear agents specifically in this task.
+
+### Result
+
+**Criterion not met.** `neural_raw` shows no significant decorrelate-vs-
+naive gap at either non-floor validity level (p=0.9986 at v=0.5, p=0.3299
+at v=0.95); the floor control is clean (p=0.1839, no spurious effect).
+Acquisition-phase `proxy_dependence` does form normally (~0.19 at
+v=0.95, checked directly, comparable to `tabular`/`linear_raw`'s own
+acquisition values), but the decorrelate arm's final value (0.010) is
+statistically indistinguishable from naive (0.008) -- the dependency
+fully washes out within the 1500-episode intervention budget, unlike
+`linear_raw`'s large retained gap.
+
+A plausible, **not confirmed**, explanation: this grid environment's
+episodes are longer than `CueValidityEnv`'s (measured directly: 9 steps
+to reach the decision cell via an optimal path, vs. 5 steps to the single
+decision phase there), and `NeuralAgentWrapper.train_step()` runs every
+`TRAIN_EVERY_STEPS=4` env steps regardless of phase -- so the same
+nominal 1500-episode intervention budget delivers roughly **1.8x** more
+gradient updates here than in the original environment.
+
+**Correction (same day, before any further data collection): the
+paragraph above originally claimed "roughly an order of magnitude more
+gradient updates," written from an unverified estimate rather than a
+direct measurement. Measuring it directly gives 9 vs. 5 steps per
+episode -- about 1.8x, not ~10x.** A 1.8x difference in training-call
+count is a much weaker candidate for explaining a swing from a large,
+significant effect to a complete null (0.010 vs. 0.008, statistically
+indistinguishable) than an order-of-magnitude difference would have been,
+so this explanation is downgraded from "plausible" to "probably not
+sufficient on its own." A second, more specific hypothesis, also **not
+confirmed**: in `CueValidityEnv`, the network's input features serve the
+decision alone (the environment requires no real control/navigation
+skill -- action is ignored entirely before the target phase), so acquired
+weights connecting the cue feature to the causal action's output are not
+competing with any other learned function. In `CueValidityGridEnv`, the
+same shared network must also represent a real navigation policy (using
+the x/y position features on most of each episode's steps), and every
+training batch mixes navigation-step transitions with decision-step
+transitions through the same weights -- this capacity-sharing/interference
+could make the cue-dependent weight component less entrenched and faster
+to overwrite under decorrelation's corrective signal, independent of raw
+step count. Distinguishing between these (or finding a different cause
+entirely) would need a dedicated follow-up, which was not undertaken as
+part of this extension. This result narrows the cross-environment
+replication's confirmed scope to `tabular` (null, as expected) and
+`linear_raw` (strong, confirmed effect); `neural_raw`'s result in this
+specific environment and budget is a genuine null, reported as such.
+
+### Step-count-matched retest (pre-registered before running; weak hypothesis, cheap to check)
+
+Written before this retest's data is collected. Given the step-count
+difference is only ~1.8x (corrected above), this retest is **not**
+expected to recover the effect and is run mainly to rule the step-count
+hypothesis in or out cheaply, not because it is the leading explanation.
+Design: `neural_raw` only, same `cue_validity` levels {0.5, 0.95}, same
+15 seeds, same 5000-episode acquisition (unchanged, so the acquired bias
+magnitude is comparable), but the post-intervention budget is reduced to
+**800 episodes in 16 blocks of 50** (vs. 1500/30 above) -- chosen so that
+total intervention-phase training calls (episodes x ~9 steps / 4 =
+~1800) approximately matches the original environment's 1500-episode
+budget (1500 x ~5 steps / 4 = ~1875 calls), rather than matching nominal
+episode count. **Success criterion**: if `neural_raw` now shows a
+significant decorrelate-vs-naive effect at >=1 non-floor validity level,
+the step-count hypothesis is supported; if it still shows no effect, the
+step-count hypothesis is not supported (consistent with the capacity-
+sharing hypothesis, or another unidentified cause) and this is reported
+as such, not reframed.
+
+### Result
+
+**Step-count hypothesis supported.** At the reduced, step-matched
+intervention budget, `neural_raw` shows a significant decorrelate-vs-
+naive effect at both validity levels (decorrelate=0.027 vs. naive=0.011,
+t=3.010, p=0.0055, d=1.14 at v=0.5; decorrelate=0.031 vs. naive=0.011,
+t=3.465, p=0.0017, d=1.31 at v=0.95) -- reversing the earlier null. The
+naive control's value barely moved (0.011 here vs. 0.008 at the full
+budget), so this is not simply "both arms are now undertrained noise";
+the gap specifically opened up. The recovered effect (0.027-0.031) is
+still noticeably smaller in absolute magnitude than `linear_raw`'s
+(0.056-0.106) at the same validity levels, which extends -- rather than
+complicates -- this lineage's established graded-effect finding
+(`neural_raw` persistent but smaller than `linear_raw`) to this second
+environment, now that the training budget has been matched well enough
+to detect it. The earlier null was a budget artifact specific to
+matching nominal episode count across environments with different
+episode lengths, not evidence that neural agents behave differently in
+this task; this is the corrected, final characterization for this
+environment.
