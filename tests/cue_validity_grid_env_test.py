@@ -145,6 +145,37 @@ def test_reverse_and_decorrelate_never_both_true_by_default():
     assert not env.is_reversed
 
 
+def test_auto_navigate_reaches_decision_cell_regardless_of_action():
+    env = CueValidityGridEnv(cue_validity=0.5, grid_size=5, seed=0, auto_navigate=True)
+    env.reset()
+    steps = 0
+    while not env.at_decision_cell():
+        env.step(2)  # always "left" -- irrelevant under auto_navigate
+        steps += 1
+        assert steps <= env.max_steps
+    assert env.pos == env.decision_cell
+
+
+def test_auto_navigate_same_step_count_as_optimal_manual_path():
+    manual = CueValidityGridEnv(cue_validity=0.5, grid_size=5, seed=0, auto_navigate=False)
+    manual.reset()
+    manual_steps = 0
+    while not manual.at_decision_cell():
+        x, y = manual.pos
+        action = 3 if x < manual.grid_size - 1 else 0
+        manual.step(action)
+        manual_steps += 1
+
+    auto = CueValidityGridEnv(cue_validity=0.5, grid_size=5, seed=0, auto_navigate=True)
+    auto.reset()
+    auto_steps = 0
+    while not auto.at_decision_cell():
+        auto.step(1)  # action is ignored under auto_navigate
+        auto_steps += 1
+
+    assert manual_steps == auto_steps
+
+
 if __name__ == "__main__":
     test_cue_tracks_hidden_state_before_decorrelation()
     test_decorrelate_removes_cue_state_relationship()
@@ -157,4 +188,6 @@ if __name__ == "__main__":
     test_state_count_matches_observe_range()
     test_available_actions_fixed_across_conditions()
     test_reverse_and_decorrelate_never_both_true_by_default()
+    test_auto_navigate_reaches_decision_cell_regardless_of_action()
+    test_auto_navigate_same_step_count_as_optimal_manual_path()
     print("All cue_validity_grid_env tests passed.")

@@ -71,7 +71,18 @@ class CueValidityGridEnv:
       additional penalty).
     """
 
-    def __init__(self, cue_validity, grid_size=5, horizon_slack=12, step_penalty=-0.01, seed=0):
+    def __init__(self, cue_validity, grid_size=5, horizon_slack=12, step_penalty=-0.01, seed=0, auto_navigate=False):
+        """`auto_navigate`: when True, movement toward `decision_cell` is
+        automatic and ignores the chosen action entirely (mirroring
+        CueValidityEnv's own pre-target-phase countdown, where the action
+        never affects anything) -- same episode length, same observation
+        features, same number of training calls per episode as the default
+        mode, but no real navigation *skill* needs to be learned. Used to
+        separate "does this environment need more gradient-update calls per
+        episode" from "does the shared network need to represent an actual
+        control policy in addition to the decision" as competing
+        explanations for any representation-dependent result (see
+        docs/cue_validity_grid_capacity_sharing.md)."""
         self.cue_validity = cue_validity
         self.grid_size = grid_size
         self.start = (0, 0)
@@ -79,6 +90,7 @@ class CueValidityGridEnv:
         manhattan = abs(self.decision_cell[0] - self.start[0]) + abs(self.decision_cell[1] - self.start[1])
         self.max_steps = manhattan + horizon_slack
         self.step_penalty = step_penalty
+        self.auto_navigate = auto_navigate
         self.rng = random.Random(seed)
         self._decorrelated = False
         self._reversed = False
@@ -171,8 +183,15 @@ class CueValidityGridEnv:
                 "position": self.pos,
             }
 
-        dx, dy = _DELTAS[action]
         x, y = self.pos
+        if self.auto_navigate:
+            tx, ty = self.decision_cell
+            if x != tx:
+                dx, dy = (1 if tx > x else -1), 0
+            else:
+                dx, dy = 0, (1 if ty > y else -1)
+        else:
+            dx, dy = _DELTAS[action]
         nx = min(self.grid_size - 1, max(0, x + dx))
         ny = min(self.grid_size - 1, max(0, y + dy))
         self.pos = (nx, ny)
