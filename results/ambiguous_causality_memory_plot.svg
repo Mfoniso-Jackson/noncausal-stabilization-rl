@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="360" viewBox="0 0 980 360">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="490" y="24" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700">Ambiguous Causality + Memory: spurious_action_rate vs ambiguity by gap</text>
+<text x="155.0" y="60" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">clear_causality</text>
+<line x1="50" y1="300" x2="260" y2="300" stroke="#222"/>
+<line x1="50" y1="70" x2="50" y2="300" stroke="#222"/>
+<text x="395.0" y="60" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">moderate_ambiguity</text>
+<line x1="290" y1="300" x2="500" y2="300" stroke="#222"/>
+<line x1="290" y1="70" x2="290" y2="300" stroke="#222"/>
+<text x="635.0" y="60" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">high_ambiguity</text>
+<line x1="530" y1="300" x2="740" y2="300" stroke="#222"/>
+<line x1="530" y1="70" x2="530" y2="300" stroke="#222"/>
+<text x="875.0" y="60" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">extreme_ambiguity</text>
+<line x1="770" y1="300" x2="980" y2="300" stroke="#222"/>
+<line x1="770" y1="70" x2="770" y2="300" stroke="#222"/>
+<polyline points="155.00,70.00 395.00,95.56 635.00,121.11 875.00,95.56" fill="none" stroke="#999999" stroke-width="2.5"/>
+<polyline points="155.00,216.36 395.00,70.00 635.00,153.64 875.00,90.91" fill="none" stroke="#6baed6" stroke-width="2.5"/>
+<polyline points="155.00,70.00 395.00,127.50 635.00,165.83 875.00,165.83" fill="none" stroke="#fd8d3c" stroke-width="2.5"/>
+<polyline points="155.00,111.82 395.00,132.73 635.00,70.00 875.00,90.91" fill="none" stroke="#c1440e" stroke-width="2.5"/>
+</svg>
