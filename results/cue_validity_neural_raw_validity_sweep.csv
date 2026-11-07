@@ -1,0 +1,6 @@
+validity,source,n_decorrelation_seeds,n_reversal_seeds,decorrelation_fraction_adapted,reversal_fraction_adapted,headroom,asymmetry_effect,t_stat,p_value,cohens_d,asymmetry_supported
+0.5,reused,15,30,0.897966,0.944189,0.102034,0.046223,1.227385,0.226355,0.372235,False
+0.6,new,15,15,0.889285,0.959623,0.110715,0.070338,1.772854,0.087133,0.670076,False
+0.75,new,15,15,0.886547,0.955966,0.113453,0.069419,1.992111,0.056192,0.752947,False
+0.9,new,15,15,0.885091,0.9473,0.114909,0.06221,2.118454,0.043143,0.8007,True
+0.95,reused,15,30,0.893641,0.947176,0.106359,0.053535,2.554184,0.014269,0.733345,True

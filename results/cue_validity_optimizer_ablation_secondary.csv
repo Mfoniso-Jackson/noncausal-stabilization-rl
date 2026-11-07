@@ -1,0 +1,5 @@
+condition,validity,sgd_decorrelate_mean,adam_decorrelate_mean,t_stat,p_value,cohens_d
+neural_raw,0.5,0.014639,0.017123,-0.707986,0.484806,-0.267593
+neural_raw,0.95,0.020032,0.026488,-1.42467,0.165304,-0.538474
+neural_interaction_only,0.5,0.024309,0.012467,2.693309,0.011815,1.017974
+neural_interaction_only,0.95,0.036098,0.02072,2.427412,0.021891,0.917475

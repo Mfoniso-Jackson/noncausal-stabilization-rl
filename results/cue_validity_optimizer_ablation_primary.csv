@@ -1,0 +1,5 @@
+condition,validity,optimizer,decorrelate_mean,naive_mean,gap,t_stat,p_value,cohens_d,has_effect
+neural_raw,0.5,sgd,0.014639,0.006575,0.008064,2.512016,0.018046,0.949452,True
+neural_raw,0.95,sgd,0.020032,0.006575,0.013457,4.139926,0.000288,1.564743,True
+neural_interaction_only,0.5,sgd,0.024309,0.01474,0.009569,1.927152,0.064163,0.728394,False
+neural_interaction_only,0.95,sgd,0.036098,0.01474,0.021358,3.32782,0.002459,1.257797,True

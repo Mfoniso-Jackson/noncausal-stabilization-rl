@@ -1,0 +1,7 @@
+condition,validity,reversal_fraction_adapted,decorrelation_fraction_adapted,t_stat,p_value,cohens_d,asymmetry_supported
+linear_interaction_only,0.5,0.764744,0.6715,2.393078,0.023655,0.904498,True
+linear_interaction_only,0.95,0.827123,0.756719,2.489593,0.018999,0.940978,True
+neural_raw,0.5,0.965819,0.897966,1.416079,0.167781,0.535228,False
+neural_raw,0.95,0.946006,0.893641,1.948312,0.061464,0.736393,False
+neural_interaction_only,0.5,0.94963,1.012232,-0.841033,0.407455,-0.317881,False
+neural_interaction_only,0.95,0.938599,0.949945,-0.300903,0.765711,-0.113731,False
