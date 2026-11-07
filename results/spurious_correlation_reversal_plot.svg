@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="320" viewBox="0 0 980 320">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="490" y="24" text-anchor="middle" font-family="Arial" font-size="17" font-weight="700">Spurious Action Reversal: SPI during reversal blocks</text>
+<text x="150.0" y="50" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">no_spurious_correlation</text>
+<line x1="50" y1="280" x2="250" y2="280" stroke="#222"/>
+<line x1="50" y1="60" x2="50" y2="280" stroke="#222"/>
+<polyline points="50.00,231.66 60.53,234.85 71.05,242.68 81.58,245.36 92.11,251.99 102.63,250.45 113.16,255.45 123.68,259.35 134.21,258.00 144.74,254.43 155.26,257.29 165.79,258.05 176.32,260.38 186.84,260.83 197.37,265.25 207.89,259.86 218.42,257.18 228.95,260.56 239.47,259.55 250.00,262.21" fill="none" stroke="#999999" stroke-width="2.5"/>
+<text x="390.0" y="50" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">weak_spurious_correlation</text>
+<line x1="290" y1="280" x2="490" y2="280" stroke="#222"/>
+<line x1="290" y1="60" x2="290" y2="280" stroke="#222"/>
+<polyline points="290.00,244.58 300.53,247.50 311.05,249.40 321.58,254.64 332.11,259.25 342.63,259.02 353.16,263.32 363.68,263.44 374.21,264.10 384.74,264.12 395.26,265.37 405.79,265.52 416.32,265.81 426.84,264.05 437.37,265.82 447.89,262.20 458.42,263.74 468.95,265.38 479.47,262.99 490.00,265.34" fill="none" stroke="#6baed6" stroke-width="2.5"/>
+<text x="630.0" y="50" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">medium_spurious_correlation</text>
+<line x1="530" y1="280" x2="730" y2="280" stroke="#222"/>
+<line x1="530" y1="60" x2="530" y2="280" stroke="#222"/>
+<polyline points="530.00,246.85 540.53,251.84 551.05,251.89 561.58,254.85 572.11,263.05 582.63,265.66 593.16,266.72 603.68,266.27 614.21,266.14 624.74,265.90 635.26,266.79 645.79,267.84 656.32,268.54 666.84,267.11 677.37,267.08 687.89,266.85 698.42,268.10 708.95,268.11 719.47,267.02 730.00,267.92" fill="none" stroke="#fd8d3c" stroke-width="2.5"/>
+<text x="870.0" y="50" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700">strong_spurious_correlation</text>
+<line x1="770" y1="280" x2="970" y2="280" stroke="#222"/>
+<line x1="770" y1="60" x2="770" y2="280" stroke="#222"/>
+<polyline points="770.00,248.63 780.53,252.56 791.05,257.88 801.58,258.80 812.11,261.74 822.63,261.18 833.16,265.64 843.68,263.75 854.21,265.58 864.74,265.53 875.26,266.01 885.79,266.30 896.32,267.46 906.84,268.85 917.37,267.30 927.89,269.07 938.42,268.24 948.95,267.70 959.47,268.28 970.00,270.34" fill="none" stroke="#c1440e" stroke-width="2.5"/>
+</svg>

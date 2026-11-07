@@ -1,0 +1,5 @@
+condition,correlation_strength,baseline_spurious_rate_mean,half_life_blocks_mean,half_life_blocks_ci95,final_spurious_rate_mean,final_spurious_rate_ci95,n_censored
+no_spurious_correlation,0.1,0.21952,5.566667,1.864597,0.080882,0.027308,2
+weak_spurious_correlation,0.6,0.237577,2.166667,0.651641,0.066633,0.021093,0
+medium_spurious_correlation,0.75,0.230363,1.966667,0.777685,0.054892,0.017441,0
+strong_spurious_correlation,0.9,0.238506,1.333333,0.50897,0.043887,0.013912,0
