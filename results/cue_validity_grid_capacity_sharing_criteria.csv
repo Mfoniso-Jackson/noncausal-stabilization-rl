@@ -1,0 +1,3 @@
+validity,decorrelate_mean,naive_mean,t_stat,p_value,cohens_d,has_effect
+0.5,0.008434,0.00808,0.186972,0.853031,0.070669,False
+0.95,0.01283,0.00808,1.899917,0.067788,0.7181,False

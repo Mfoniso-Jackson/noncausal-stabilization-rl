@@ -76,3 +76,31 @@ on its own, calling for further work this document does not undertake.
 
 Nothing above will change after results are inspected, following the same
 discipline as every prior pre-registration in this lineage.
+
+## Addendum (added after the run below; the sections above are unchanged)
+
+**Capacity-sharing hypothesis not supported.** With step count held
+exactly constant at the 1500-episode budget, `auto_navigate=True` shows no
+significant decorrelate-vs-naive effect at either validity level
+(decorrelate=0.008 vs. naive=0.008, p=0.853 at v=0.5; decorrelate=0.013 vs.
+naive=0.008, p=0.068 at v=0.95). This is statistically indistinguishable
+from the already-null normal-navigation result at the same budget, and
+removing the navigation-learning demand did not recover the effect.
+
+Per the pre-registered criteria, this leaves **step-count as the better-
+supported explanation by elimination**, now on firmer footing than before:
+it is the only one of the two candidate explanations that has actually
+been tested positively (the 800-episode step-matched condition did show
+the effect), while capacity-sharing has now been tested directly, at
+matched step count, and did not. The v=0.95 cell (p=0.068, d=0.72) is
+close enough to the significance threshold that a moderately larger seed
+count could in principle move it either way; this is noted rather than
+treated as a reason to doubt the overall conclusion, since v=0.5's result
+(p=0.853) shows no comparable trend at all.
+
+This closes the question raised in `docs/cue_validity_cross_environment.md`'s
+neural_raw extension addendum: the grid environment's need for a larger
+step-matched (rather than episode-matched) budget to detect `neural_raw`'s
+effect is best explained by the raw volume of corrective training updates
+per nominal episode, not by any interference from needing to learn a
+navigation policy.
