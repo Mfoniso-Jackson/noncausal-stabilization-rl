@@ -194,6 +194,7 @@ Documented in full in Section 7.9. Three successive, independently diagnosed con
 
 ## 11. Limitations
 
+- **This is a single-agent study; it does not test population-scale emergence.** Every result in Section 7 concerns one agent's own persistent dependence on a cue, isolated via naive and floor controls. It does not test, and should not be read as evidence about, whether non-causal dependence emerges from the interaction of large agent populations (the originally envisioned, ecosystem-scale version of this question) — a distinct hypothesis requiring different machinery, scoped out in Section 13.1.
 - **Related-work citations are bibliographically checked but not fully re-verified against primary texts.** Section 3's six citations were checked during this project via live web search (titles, authors, venues, years, volumes, and page ranges in Section 15 are from that check, not from memory), and each paper's core claim as described here was cross-checked against secondary summaries. A full line-by-line re-read of each primary source against every interpretive sentence in Section 3 was not performed; in particular, the Rescorla-Wagner chapter's page range (64–99) was corroborated by the majority of indexed bibliographic records but not confirmed against the original 1972 volume directly, and should be checked before any external use of this report.
 - **Two environment structures.** Both share the same underlying causal mechanism (a hidden state, a cue correlated with it, one causal and one cue-associated action); a third, more structurally distinct environment has not been tested.
 - **PPO's persistence question remains statistically unresolved.** Section 7.9's final, methodologically corrected comparison is directionally consistent with the hypothesis but underpowered at 15 seeds (Cohen's d 0.3–0.5); a seed top-up (the standard escalation used elsewhere in this project when an effect size is small but directionally consistent) has not been run.
@@ -212,7 +213,22 @@ For the broader evaluation-engineering goal stated in Section 2: the principles 
 
 ## 13. Future Research
 
-The following are proposed, not completed, work:
+### 13.1 Scaling to multi-agent ecosystems — a different claim, not yet tested
+
+This report's entire empirical program is a **single-agent** study: one learner, one cue, one environment, measured against controls that isolate that one agent's own history from the rest of the world. That scope was deliberate — it is what made every result in Section 7 fully falsifiable, naive- and floor-controlled, and replicable by hand. It is also narrower than the phenomenon this project was originally motivated by: non-causal stabilization that *emerges* from the interaction of very large populations of agents — potentially billions — co-existing in a shared ecosystem. Nothing in this report tests that claim, and the single-agent results should not be read as evidence for or against it. The two are related but distinct hypotheses, and the gap between them is worth stating precisely rather than eliding.
+
+The single-agent mechanism identified here (Sections 7.2–7.9, 8) requires a cue whose statistical relationship to reward is fixed by the environment, independent of the agent's own behaviour. At population scale, this assumption can break in ways that have no single-agent analogue:
+
+- **Endogenous cue validity.** In a population of interacting agents, a "cue" may be informative only *because* enough other agents act on it — e.g., a price signal, a social-proof signal, or a shared heuristic whose predictive value is produced by aggregate behaviour rather than supplied by a fixed environment. A cue's validity could then drift as the population's own reliance on it changes, a feedback loop this report's fixed-`v` design cannot represent.
+- **Correlated, not independent, agents.** This report's statistical tests (Section 5.4) assume independence across seeds/agents. A population of agents that observe correlated cues, imitate one another, or share training data breaks that assumption outright; a population-scale study needs its own statistical methodology, not a scaled-up version of this report's t-tests and Cohen's d.
+- **Selection effects.** In an ecosystem with turnover (agents entering, failing, and exiting), a cue-dependent strategy's prevalence reflects which agents survived, not only whether any individual agent's dependence is "persistent" in this report's sense. Measuring population-level stabilization likely requires a prevalence- or market-share-style metric, distinct from `proxy_dependence`.
+- **Computational scope.** "Billions of interacting agents" is also, simply, a different order of engineering problem — multi-agent RL at that scale is itself an active, unsolved systems challenge, independent of anything about non-causal cues specifically.
+
+A tractable first step, consistent with this project's own incremental and pre-registered discipline, would not jump to billions. It would extend `CueValidityEnv` (or `CueValidityGridEnv`) to a small population (order 10–1000) of agents that share an environment in which the cue's statistics are a function of the *population's* aggregate action distribution rather than a fixed parameter `v` — the minimal change needed to introduce a genuine feedback loop — and ask a population-scale analogue of H1–H4: does population-level cue dependence persist after the population's aggregate behaviour (not any one agent's training) is perturbed, does it scale differently with population size than with any single agent's capacity, and does it require new controls (e.g., a population with agents trained independently but never interacting, as a population-level "naive control") before any claim about emergence can be made. This is proposed, not completed, work; none of it is represented in Section 7's results.
+
+### 13.2 Smaller, single-agent extensions
+
+The following are proposed, not completed, work, within this report's existing single-agent scope:
 
 1. A seed top-up for PPO's persistence test and capacity sweep (Section 7.9), to resolve whether the small, direction-consistent effect found there is real.
 2. A third, more structurally distinct environment (e.g., continuous control, or a task with a genuinely different reward topology) to further test the cross-environment replication's generality.
