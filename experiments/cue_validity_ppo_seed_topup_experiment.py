@@ -77,7 +77,7 @@ def run():
     write_csv(
         os.path.join(RESULTS_DIR, "cue_validity_ppo_seed_topup_summaries.csv"),
         new_rows,
-        ["label", "validity", "seed", "final_proxy_dependence"],
+        ["label", "validity", "seed", "acquisition_proxy_dependence", "acquisition_entropy", "final_proxy_dependence", "final_entropy"],
     )
 
     results = []
