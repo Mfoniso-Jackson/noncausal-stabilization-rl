@@ -263,6 +263,40 @@ indefinitely -- a genuine, mechanistically-grounded instance of H4
 whether the specific persistence effect itself is ultimately confirmed or
 not with more seeds.
 
+## Seed top-up: result
+
+**The effect did not hold up -- and it shrank rather than merely losing
+significance.** With the full n=30 per arm per validity level (seeds
+0-29), both validity levels are clearly non-significant (v=0.5: t=0.287,
+p=0.775, Cohen's d=0.075; v=0.95: t=1.162, p=0.250, d=0.305), and the
+bootstrap difference CIs are now close to symmetric around zero
+(`[-0.003, 0.004]` at v=0.5, `[-0.001, 0.005]` at v=0.95) rather than
+hugging the positive side as the n=15 CIs did. Critically, this is not
+"still not significant, same effect size, now with a wider CI" -- the
+point estimate for Cohen's d itself dropped from 0.32 to 0.075 at v=0.5
+and from 0.54 to 0.305 at v=0.95. That pattern (effect size shrinking
+substantially as sample size grows, not just losing significance) is the
+signature of the original n=15 estimate having been inflated by small-sample
+noise, not of a real, moderate effect that merely needed more power to
+detect.
+
+**Final, resolved answer for H4 and PPO**: after correcting all three
+methodological confounds documented above (DQN-calibrated acquisition
+budget, the undertraining misdiagnosis, the total-episode-count confound)
+and running the standard seed top-up, PPO does **not** show a
+decorrelate-vs-naive persistence effect distinguishable from noise. This
+converges PPO with `tabular`'s null pattern at the level of the
+raw statistical result -- but, as established above, via a completely
+different mechanism (`tabular` never acquires cue-conditioned value in
+the first place; PPO's actor-logit readout of a genuinely-acquired
+cue-conditioned policy necessarily washes out as entropy collapses). This
+is itself a clean instance of H4: two algorithm classes can converge on
+the same observable null for mechanistically unrelated reasons, which a
+single pattern-matching look at the final numbers alone would not
+distinguish -- only the full methodological history in this document
+does. This closes the PPO investigation; no further seed top-up is
+planned without a new, separately-motivated reason to revisit it.
+
 ## Seed top-up: pre-registered before running
 
 **Design**: adds 15 new seeds (15-29) to both arms of the total-episode-matched
