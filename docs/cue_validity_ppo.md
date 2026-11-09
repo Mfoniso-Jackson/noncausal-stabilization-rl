@@ -262,3 +262,31 @@ indefinitely -- a genuine, mechanistically-grounded instance of H4
 ("different algorithms exhibit different patterns"), independent of
 whether the specific persistence effect itself is ultimately confirmed or
 not with more seeds.
+
+## Seed top-up: pre-registered before running
+
+**Design**: adds 15 new seeds (15-29) to both arms of the total-episode-matched
+comparison above, following the identical escalation convention already used
+in this lineage (`docs/cue_validity_neural_reversal.md`'s `neural_raw` seed
+top-up, `experiments/cue_validity_neural_raw_seed_topup.py`): `decorrelate`
+(800 acquisition + 1500 intervention, 2300 total) and `naive_total_matched`
+(2300 total, entirely decorrelated), identical protocol to
+`experiments/cue_validity_ppo_total_matched_experiment.py` and
+`experiments/cue_validity_ppo_retest_experiment.py`, combined with the
+existing 15 seeds (0-14) for a final n=30 per arm per validity level.
+
+**Success/failure criteria (fixed before data collection)**: unchanged in
+form from the total-episode-matched retest above -- significant if
+`decorrelate`'s final `|proxy_dependence|` exceeds `naive_total_matched`'s
+at either validity level (`compare_groups`, p < 0.05, correct direction).
+**Stated honestly in advance**: a power calculation for the observed
+effect sizes (d=0.32 at v=0.5, d=0.54 at v=0.95) indicates that even n=30
+per arm is unlikely to reach 80% power for the smaller effect (d=0.32
+needs roughly n=155 per arm for 80% power at alpha=0.05; d=0.54 needs
+roughly n=55). This top-up is run anyway, as the standard escalation step
+used elsewhere in this lineage, and the v=0.95 result in particular is close
+enough to adequately powered that a null result here is already informative
+(it would mean the bootstrap CI's near-zero lower bound was the more
+accurate signal). A result that remains non-significant at n=30 will be
+reported as such, not used to justify a further, larger top-up without
+separately re-registering that decision.
