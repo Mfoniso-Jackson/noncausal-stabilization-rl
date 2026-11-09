@@ -262,3 +262,65 @@ indefinitely -- a genuine, mechanistically-grounded instance of H4
 ("different algorithms exhibit different patterns"), independent of
 whether the specific persistence effect itself is ultimately confirmed or
 not with more seeds.
+
+## Seed top-up: result
+
+**The effect did not hold up -- and it shrank rather than merely losing
+significance.** With the full n=30 per arm per validity level (seeds
+0-29), both validity levels are clearly non-significant (v=0.5: t=0.287,
+p=0.775, Cohen's d=0.075; v=0.95: t=1.162, p=0.250, d=0.305), and the
+bootstrap difference CIs are now close to symmetric around zero
+(`[-0.003, 0.004]` at v=0.5, `[-0.001, 0.005]` at v=0.95) rather than
+hugging the positive side as the n=15 CIs did. Critically, this is not
+"still not significant, same effect size, now with a wider CI" -- the
+point estimate for Cohen's d itself dropped from 0.32 to 0.075 at v=0.5
+and from 0.54 to 0.305 at v=0.95. That pattern (effect size shrinking
+substantially as sample size grows, not just losing significance) is the
+signature of the original n=15 estimate having been inflated by small-sample
+noise, not of a real, moderate effect that merely needed more power to
+detect.
+
+**Final, resolved answer for H4 and PPO**: after correcting all three
+methodological confounds documented above (DQN-calibrated acquisition
+budget, the undertraining misdiagnosis, the total-episode-count confound)
+and running the standard seed top-up, PPO does **not** show a
+decorrelate-vs-naive persistence effect distinguishable from noise. This
+converges PPO with `tabular`'s null pattern at the level of the
+raw statistical result -- but, as established above, via a completely
+different mechanism (`tabular` never acquires cue-conditioned value in
+the first place; PPO's actor-logit readout of a genuinely-acquired
+cue-conditioned policy necessarily washes out as entropy collapses). This
+is itself a clean instance of H4: two algorithm classes can converge on
+the same observable null for mechanistically unrelated reasons, which a
+single pattern-matching look at the final numbers alone would not
+distinguish -- only the full methodological history in this document
+does. This closes the PPO investigation; no further seed top-up is
+planned without a new, separately-motivated reason to revisit it.
+
+## Seed top-up: pre-registered before running
+
+**Design**: adds 15 new seeds (15-29) to both arms of the total-episode-matched
+comparison above, following the identical escalation convention already used
+in this lineage (`docs/cue_validity_neural_reversal.md`'s `neural_raw` seed
+top-up, `experiments/cue_validity_neural_raw_seed_topup.py`): `decorrelate`
+(800 acquisition + 1500 intervention, 2300 total) and `naive_total_matched`
+(2300 total, entirely decorrelated), identical protocol to
+`experiments/cue_validity_ppo_total_matched_experiment.py` and
+`experiments/cue_validity_ppo_retest_experiment.py`, combined with the
+existing 15 seeds (0-14) for a final n=30 per arm per validity level.
+
+**Success/failure criteria (fixed before data collection)**: unchanged in
+form from the total-episode-matched retest above -- significant if
+`decorrelate`'s final `|proxy_dependence|` exceeds `naive_total_matched`'s
+at either validity level (`compare_groups`, p < 0.05, correct direction).
+**Stated honestly in advance**: a power calculation for the observed
+effect sizes (d=0.32 at v=0.5, d=0.54 at v=0.95) indicates that even n=30
+per arm is unlikely to reach 80% power for the smaller effect (d=0.32
+needs roughly n=155 per arm for 80% power at alpha=0.05; d=0.54 needs
+roughly n=55). This top-up is run anyway, as the standard escalation step
+used elsewhere in this lineage, and the v=0.95 result in particular is close
+enough to adequately powered that a null result here is already informative
+(it would mean the bootstrap CI's near-zero lower bound was the more
+accurate signal). A result that remains non-significant at n=30 will be
+reported as such, not used to justify a further, larger top-up without
+separately re-registering that decision.

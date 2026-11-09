@@ -115,3 +115,64 @@ environment's full representation x intervention story for `neural_raw`
 honestly-reported loose end (`neural_interaction_only`'s own
 direction-reversed effect at v=0.5) left for a future, more targeted
 investigation rather than smoothed over.
+
+## Addendum: diagnosis of the direction-reversed effect (diagnostic run, not a new pre-registered experiment -- same status as the PPO entropy-collapse diagnostic in docs/cue_validity_ppo.md)
+
+**Hypothesis, checked directly rather than assumed**: the `naive` arm
+trains its entire 800-episode budget at the low, fixed intervention
+epsilon (0.04), with no exploration-rich phase at all, while the
+`decorrelate` arm inherits a well-explored network from an 800-episode
+*annealed*, high-start acquisition phase before its own 800-episode
+intervention phase at the same low epsilon. If `interaction_only`
+features are harder to fit cleanly from limited, low-exploration data
+than `raw` features, the `naive` arm's Q-network could simply be
+noisier/less converged than `decorrelate`'s by the time both are probed
+-- and because `proxy_dependence` is reported as `|value|`, extra noise
+inflates the naive arm's apparent magnitude directly. This would be a
+genuine confound (unequal effective training regimes between arms), not
+evidence of real anti-persistence -- structurally analogous to, but
+mechanistically distinct from, the PPO total-episode-count confound
+documented in `docs/cue_validity_ppo.md` (there: entropy-collapse
+trajectory length; here: exploration-driven value-function noise).
+
+**Direct check**: reran the `naive` arm at v=0.5 (same 15 seeds, same
+features, same environment, same 800 total episodes) with the SAME
+annealed epsilon schedule used for `decorrelate`'s acquisition phase,
+instead of the fixed low intervention epsilon. Validated the unmodified
+reproduction path first (seed 0's fixed-epsilon rerun reproduced the
+original experiment's value, 0.006933, exactly).
+
+| condition | signed mean | signed std | abs mean |
+|---|---:|---:|---:|
+| `naive`, fixed low epsilon (as in the real experiment) | 0.0155 | 0.0362 | 0.0335 |
+| `naive`, annealed epsilon (diagnostic) | 0.0070 | 0.0193 | 0.0175 |
+| `decorrelate`, v=0.5 (unchanged, for comparison) | 0.0035 | 0.0202 | 0.0148 |
+
+**Result: the hypothesis is supported.** Matching `naive`'s exploration
+schedule to `decorrelate`'s roughly halves both its variance (std 0.0362
+to 0.0193) and its mean magnitude (abs mean 0.0335 to 0.0175), bringing
+it in line with `decorrelate`'s own floor (std 0.0202, abs mean 0.0148)
+rather than well above it. The direction-reversed, nominally significant
+result in the main experiment is therefore substantially (if not
+necessarily entirely, given this is a single diagnostic run rather than
+a new pre-registered comparison with its own significance test) an
+artifact of the `naive` arm's low-exploration training regime leaving its
+`interaction_only` value function noisier than `decorrelate`'s, not
+evidence of genuine anti-persistence. This is consistent with -- and
+resolves the apparent tension with -- the main nonlinear experiment's
+own finding (Section 7.4 of the manuscript) that `neural_interaction_only`
+is statistically indistinguishable from its naive-control floor: here, in
+the grid environment specifically, that floor itself was measured
+unevenly between arms.
+
+**What this does not do**: it does not re-run the comparison as a new
+pre-registered test with its own significance criterion (that would
+require pre-registering an exploration-schedule-matched variant of the
+whole experiment before collecting new confirmatory data, which was
+judged unnecessary given how directly this diagnostic already explains
+the direction and magnitude of the original anomaly). The original
+experiment's own reported numbers in
+`reports/cue_validity_grid_neural_reversal_interaction_report.md` are left
+unchanged; this addendum explains them rather than overturning the
+pre-registered verdict (`has_own_effect: False`, which was already the
+correct, honest reading given the pre-registered criterion).
