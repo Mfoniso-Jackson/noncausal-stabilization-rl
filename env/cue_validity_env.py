@@ -62,14 +62,25 @@ class CueValidityEnv:
       ACTION_CUE ever affects reward, transitions, or action availability,
       in any condition -- this is fixed for the lifetime of the environment
       and is not touched by `decorrelate()`.
+    - `reward_noise` (default 0.0, backward-compatible): with this
+      probability, a correctly-earned reward (ACTION_CAUSAL at
+      target_phase with hidden_state == 1) is withheld instead of
+      delivered. This is the one environment-level "outcome uncertainty"
+      knob this class exposes -- see docs/cue_validity_uncertainty_sweep.md.
+      It is a pure property of the reward-delivery process, identical for
+      the causal and cue-associated actions (the cue-associated action
+      never earns reward regardless, noisy or not), and is never read by
+      or passed to any agent; it must never be set as a function of
+      anything agent-side (see that document's stated rationale).
     """
 
-    def __init__(self, cue_validity, cue_phase=3, target_phase=4, horizon_slack=10, step_penalty=-0.002, seed=0):
+    def __init__(self, cue_validity, cue_phase=3, target_phase=4, horizon_slack=10, step_penalty=-0.002, reward_noise=0.0, seed=0):
         self.cue_validity = cue_validity
         self.cue_phase = cue_phase
         self.target_phase = target_phase
         self.horizon = target_phase + horizon_slack
         self.step_penalty = step_penalty
+        self.reward_noise = reward_noise
         self.rng = random.Random(seed)
         self._decorrelated = False
         self._reversed = False
@@ -150,8 +161,10 @@ class CueValidityEnv:
             if action == ACTION_CAUSAL:
                 self.causal_action_taken = True
                 if self.hidden_state == 1:
-                    reward += 1.0
-                    self.reward_obtained = True
+                    withheld = self.reward_noise > 0.0 and self.rng.random() < self.reward_noise
+                    if not withheld:
+                        reward += 1.0
+                        self.reward_obtained = True
             self.done = True
         else:
             self.phase += 1

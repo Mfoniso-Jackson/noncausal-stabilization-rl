@@ -1,4 +1,4 @@
-from env.cue_validity_env import CueValidityEnv, validity_to_probs, ACTION_CAUSAL
+from env.cue_validity_env import CueValidityEnv, validity_to_probs, ACTION_CAUSAL, ACTION_CUE
 
 
 def test_validity_to_probs_endpoints():
@@ -90,6 +90,61 @@ def test_reverse_flips_cue_state_correlation():
     assert rate < 0.15, f"expected strong anti-correlation after reverse(), got agreement rate {rate}"
 
 
+def test_reward_noise_defaults_to_zero_and_is_backward_compatible():
+    env = CueValidityEnv(cue_validity=1.0, seed=0)
+    assert env.reward_noise == 0.0
+
+
+def test_reward_noise_withholds_earned_reward_at_the_stated_rate():
+    """reward_noise=1.0 should withhold every earned reward; reward_noise=0.0
+    should withhold none. Intermediate rates should land close to the stated
+    probability over many trials."""
+    for noise, expect_low, expect_high in ((0.0, 0.99, 1.01), (1.0, -0.01, 0.01), (0.5, 0.40, 0.60)):
+        obtained = 0
+        trials = 3000
+        for i in range(trials):
+            env = CueValidityEnv(cue_validity=1.0, reward_noise=noise, seed=i)
+            env.reset()
+            env.hidden_state = 1  # force the rewarding case to isolate the noise mechanism
+            while env.phase < env.target_phase:
+                env.step(2)
+            _, reward, done, info = env.step(ACTION_CAUSAL)
+            if info["reward_obtained"]:
+                obtained += 1
+        rate = obtained / trials
+        assert expect_low <= rate <= expect_high, f"reward_noise={noise}: expected obtained-rate in [{expect_low}, {expect_high}], got {rate}"
+
+
+def test_reward_noise_never_lets_the_cue_action_earn_reward():
+    """The one thing reward_noise must never do is make ACTION_CUE
+    rewarding under any noise level -- it only ever withholds an
+    already-earned causal reward, never grants an unearned one."""
+    for noise in (0.0, 0.3, 0.6, 1.0):
+        for seed in range(50):
+            env = CueValidityEnv(cue_validity=1.0, reward_noise=noise, seed=seed)
+            env.reset()
+            env.hidden_state = 1
+            while env.phase < env.target_phase:
+                env.step(2)
+            _, reward, done, info = env.step(ACTION_CUE)
+            assert not info["reward_obtained"]
+            assert reward <= 0.0 + 1e-9
+
+
+def test_reward_noise_does_not_affect_cue_validity_mechanics():
+    """reward_noise must be fully orthogonal to the cue/hidden-state
+    relationship -- adding reward noise must not change cue_validity's
+    own, already-tested behavior."""
+    for noise in (0.0, 0.5, 1.0):
+        agreements = 0
+        trials = 2000
+        for i in range(trials):
+            env = CueValidityEnv(cue_validity=1.0, reward_noise=noise, seed=i)
+            agreements += int(env.cue_present == env.hidden_state)
+        rate = agreements / trials
+        assert rate > 0.85, f"reward_noise={noise} should not change cue/state agreement, got {rate}"
+
+
 def test_reverse_and_decorrelate_never_both_true_by_default():
     env = CueValidityEnv(cue_validity=0.5, seed=0)
     assert not env.is_decorrelated
@@ -119,4 +174,8 @@ if __name__ == "__main__":
     test_observation_vector_target_flags()
     test_reverse_flips_cue_state_correlation()
     test_reverse_and_decorrelate_never_both_true_by_default()
+    test_reward_noise_defaults_to_zero_and_is_backward_compatible()
+    test_reward_noise_withholds_earned_reward_at_the_stated_rate()
+    test_reward_noise_never_lets_the_cue_action_earn_reward()
+    test_reward_noise_does_not_affect_cue_validity_mechanics()
     print("All cue_validity_env tests passed.")
