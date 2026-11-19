@@ -1,0 +1,7 @@
+condition,validity,decorrelate_mean,naive_mean,t_stat,p_value,holm_adjusted_p,cohens_d,has_effect
+linear_raw,0.5,0.061932,0.009443,32.225448,0.0,0.0,12.180046,True
+linear_raw,0.95,0.109891,0.009443,62.411706,0.0,0.0,23.589352,True
+neural_raw,0.5,0.017123,0.008534,2.782731,0.009544,0.011016,1.051772,True
+neural_raw,0.95,0.026488,0.008534,4.293113,0.000191,0.000573,1.622643,True
+recurrent_gru,0.5,0.040462,0.022934,3.007915,0.005508,0.011016,1.136884,True
+recurrent_gru,0.95,0.054787,0.022934,5.375857,1e-05,4e-05,2.031882,True

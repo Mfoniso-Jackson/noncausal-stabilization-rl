@@ -96,3 +96,50 @@ it" as the question itself, not as a confound to control away.
 
 Nothing above will change after results are inspected, following the same
 discipline as every prior pre-registration in this project.
+
+## Result
+
+**`recurrent_gru` shows the pattern cleanly, and with a slightly larger
+effect size than `neural_raw` at both validity levels.** All 6 cells
+survive Holm-Bonferroni correction (worst case holm p = 0.011).
+`linear_raw`'s rerun reproduces its originally-published numbers (from
+`cue_validity_proxy_dependence_experiment.py`) to the fourth decimal place
+(d = 12.180046 vs. 12.180046, d = 23.589352 vs. 23.589352), confirming the
+rerun is a faithful, deterministic reproduction and that this experiment's
+`neural_raw`/`recurrent_gru` comparison is directly comparable to it.
+
+| condition | v=0.5 Cohen's d | v=0.95 Cohen's d |
+|---|---:|---:|
+| `linear_raw` | 12.18 | 23.59 |
+| `recurrent_gru` | 1.14 | 2.03 |
+| `neural_raw` | 1.05 | 1.62 |
+
+**One caveat worth stating plainly rather than overlooking**:
+`recurrent_gru`'s naive-control floor itself is elevated relative to
+`neural_raw`'s (0.0229 vs. 0.0085 at v=0.5; same at v=0.95 since the naive
+arm never sees `validity`, matching the established pattern seen
+elsewhere in this project where the naive arm's trajectory depends only
+on the decorrelated environment and total training, not on the nominal
+validity parameter). Both arms use the identical training protocol within
+this experiment (same epsilon schedule, same episode budget), so this is
+not the unequal-exploration-schedule artifact found and fixed in
+`docs/cue_validity_grid_neural_reversal_interaction.md`'s addendum; it is
+more likely an intrinsic property of the GRU's windowed input giving it a
+higher resting `proxy_dependence` reading even with no real persistence to
+measure, plausibly because repeating the 5-step window for every probe
+compounds whatever small, architecture-specific instability a GRU head has
+relative to a plain MLP head. The decorrelate-vs-naive *gap* is still
+genuinely larger for `recurrent_gru` than for `neural_raw` at both
+levels, not merely a uniform upward shift masking an unchanged gap, but
+this elevated floor is relevant context for how confidently "recurrence
+modestly increases persistence relative to a plain MLP" should be read,
+and is reported rather than smoothed over.
+
+**Net reading**: recurrence is not a disqualifying or synergistic factor
+for this phenomenon; a GRU-based agent shows the same qualitative pattern
+as every other function-approximation agent tested in this project, at a
+magnitude between `neural_raw`'s and `linear_raw`'s, closer to
+`neural_raw`'s. This extends H4 to a fourth architecture and closes the
+"recurrent architecture only tested under confounded conditions" gap
+identified in the Research State Audit and
+`docs/symbolic_stabilization_audit.md`.
