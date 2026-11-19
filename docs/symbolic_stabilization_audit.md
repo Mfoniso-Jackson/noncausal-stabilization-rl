@@ -230,38 +230,35 @@ symbols).
 |---|---|
 | RQ1 (emergence) | Answered for the single-cue case (`docs/research_report.md` Sections 7.1-7.4): emerges under function approximation, not tabular, graded by capacity and coordinate access. Not yet tested for multi-symbol emergence. |
 | RQ2 (stabilization/persistence) | Answered for the single-cue case (Sections 7.2-7.3, 7.9): persists through intervention under function approximation; the reversal-vs-decorrelation asymmetry (H3) is the clearest existing mechanism result. |
-| RQ3 (uncertainty) | **Not yet validly tested anywhere in this repository** (Section 2 above). This is the most important open item and the most natural next experiment. |
+| RQ3 (uncertainty) | **Now answered, cleanly, for one operationalization of uncertainty.** `docs/cue_validity_uncertainty_sweep.md` (Section 6 below): with uncertainty manipulated only as an environment property (reward-delivery noise) and no agent-side setting tied to it, persistence at `v=0.95` is robust at every noise level tested (Cohen's d 11.9-23.6, all surviving Holm-Bonferroni) but its magnitude *decreases* monotonically as noise increases, the opposite of the central hypothesis. Floor control clean throughout. Not yet tested for other forms of uncertainty (noisy/time-varying cue validity, hidden-state uncertainty) or other agent classes. |
 | RQ4 (symbolic representation as an observable mechanism) | Not yet addressed. No explicit symbolic layer exists in either lineage (Section 1.1, 3). |
 | RQ5 (revision) | Partially addressed: reversal (H3) is a form of forced revision; whether an agent can *spontaneously* detect that a heuristic has become unreliable, without an environment-forced intervention, has not been tested. |
 | RQ6 (generalization) | Partially addressed: `docs/research_report.md` Section 7.7 (cross-environment replication) and Section 13.2 item 2 (proposed third environment) already cover this for non-causal stabilization generally; not yet tested for anything symbol-specific. |
 
-## 6. The strongest next experiment
+## 6. The strongest next experiment (done) and what follows it
 
-Combining the two clearest gaps (Section 2's RQ3 confound, Section 4's
-multi-symbol requirement), the single strongest next experiment is **a
-properly controlled uncertainty sweep, built on this session's validated
-`CueValidityEnv`/`linear_raw` infrastructure rather than the confounded
-`GridCueEnv` pipeline**, with:
+**Done.** `docs/cue_validity_uncertainty_sweep.md` implements and runs
+exactly the experiment this section originally proposed: `CueValidityEnv`
+extended with a `reward_noise` constructor parameter (an environment
+property only, never read by or passed to the agent), crossed with
+`cue_validity in {0.0, 0.95}`, `linear_raw` only, 15 seeds, the existing
+naive-control/floor-control/Holm-Bonferroni methodology unchanged,
+`proxy_dependence` as the primary metric. Result: persistence survives at
+every noise level but its magnitude shrinks monotonically as noise
+increases (d: 23.6 to 16.2 to 11.9 across noise 0.0/0.3/0.6), the opposite
+of the central hypothesis, with a clean floor control ruling out a
+noise-variance measurement artifact. Full result and mechanistic reading
+in that document's "Result" section.
 
-- Uncertainty manipulated as an actual environment property (e.g. reward
-  noise or outcome stochasticity added to the causal action's payoff), never
-  as an agent hyperparameter. No agent setting may be a function of the
-  uncertainty condition; this is the one non-negotiable fix to the existing
-  design.
-- The existing naive-control, floor-control, and Holm-Bonferroni-corrected
-  methodology applied unchanged, so this experiment is held to the same
-  standard as everything already in `docs/research_report.md`.
-- `proxy_dependence` as the primary metric (not CDS/SPI alone, given
-  Section 1.3's floor concern), with CDS/SPI reported alongside for
-  continuity with the directive's framing.
-- A pre-registered success criterion fixed before data collection, per this
-  project's standing discipline.
-
-This single experiment would be the first valid test of RQ3 in this
-repository's history. A genuine multi-symbol environment (Section 4) is the
-right second step once RQ3 has a clean answer, since it is a larger design
-change and should not be built on top of an unresolved confound in the
-simpler case.
+A genuine multi-symbol environment (Section 4) is the natural next step now
+that RQ3 has a clean answer in at least one operationalization of
+uncertainty. Before building it, it is worth deciding whether to first test
+a second uncertainty operalization (e.g. noisy or time-varying cue validity,
+rather than noisy reward delivery) given how directly this result
+contradicts the original hypothesis, since a multi-symbol environment's own
+uncertainty manipulation will need to pick one form and this result alone
+does not establish which form, if any, would show the originally-hypothesized
+direction.
 
 ## 7. What this audit recommends against, for now
 
